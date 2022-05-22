@@ -2,6 +2,7 @@ import Head from "next/head"
 import logo from 'assets/back_up.png'
 import Image from 'next/image'
 import Link from "next/link"
+import RatingBar from "components/RatingBar"
 import 'styles/app.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
@@ -59,7 +60,7 @@ export default function App({ Component, pageProps }) {
                                 <label htmlFor="director">Director</label>
                                 <input type="text" id='director' />
                                 <label htmlFor="ratings">Ratings</label>
-                                <input type="text" id='ratings' />
+                                <RatingBar id='ratings' />
 
                                 <button type="submit">SEARCH</button>
                             </form>

@@ -1,0 +1,47 @@
+.container {
+    position: relative;
+}
+
+.bar {
+    width: 100%;
+    margin: 15px 0;
+    height: 5px;
+    background-color: transparent;
+    /* border-radius: 3px; */
+    /* border: 3px solid black; */
+}
+
+#start {
+}
+
+#end {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#start, #end {
+    cursor: pointer;
+}
+
+/* #start::-webkit-slider-runnable-track, #end::-webkit-slider-runnable-track, #start::-ms-track, #end::-ms-track,*/
+#start::-moz-range-track {
+    display: none;
+    background-color: black;
+    padding: 2px 0;
+    border-radius: 3px;
+    /* border: 2px solid black; */
+}
+
+#start::-moz-range-thumb, #end::-moz-range-thumb {
+    padding: 2px;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid black;
+}
+
+.num {
+    position: absolute;
+    top: -15px;
+    left: 6px;
+}

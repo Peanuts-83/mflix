@@ -69,7 +69,7 @@ a:hover {
 	background-size: 700px;
 	max-width: 1400px;
 	width: 100%;
-	height: 25vh;
+	height: 300px;
 	transition: all 0.5s;
 }
 
@@ -119,7 +119,7 @@ footer {
 @media screen and (max-width: 768px) {
 	.logo {
 		background-size: 400px;
-		height: 15vh;
+		height: 150px;
 	}
 
     nav {
