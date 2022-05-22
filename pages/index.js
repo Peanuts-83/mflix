@@ -6,14 +6,12 @@ export default function Home({ isConnected }) {
   return (
     <div className="container">
 
-      <main>
-
-      </main>
 
 
-      <style jsx>{`
+      {/* <style jsx>{`
         .container {
-          min-height: 100vh;
+          margin-top: auto;
+          // min-height: 25vh;
           padding: 0 3rem;
           display: flex;
           flex-direction: column;
@@ -152,22 +150,7 @@ export default function Home({ isConnected }) {
             flex-direction: column;
           }
         }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
+      `}</style> */}
     </div>
   )
 }
