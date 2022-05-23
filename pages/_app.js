@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }) {
             <main>
                 <header>
                     <nav>
-                        <a className="icon" title='Intentions' href={showIntentions}>
+                        <a className="icon" title='Intentions' href='#'>
                             <FontAwesomeIcon icon={faInfoCircle} />
                             <p className="icon_text">
                                 Intentions
