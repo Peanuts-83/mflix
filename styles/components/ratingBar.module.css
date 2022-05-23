@@ -22,6 +22,7 @@
     position: absolute;
     top: 11px;
     padding: 0 11px;
+    font-size: 16px;
 }
 
 #start, #end {
@@ -64,4 +65,10 @@
     left: 0;
     height: 6px;
     background-color: #ffc700;
+}
+
+@media screen and (max-width: 768px) {
+    /* .outputStart, .outputEnd {
+        font-size: 12px;
+    } */
 }
