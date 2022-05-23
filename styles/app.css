@@ -26,10 +26,8 @@ header {
 	background-color: #ffc700;
 	display: flex;
 	flex-direction: column;
-	width: 100%;
-	border-bottom: 5px solid black;
+	border-bottom: 3px solid black;
 	box-shadow: 0 5px 15px black;
-	/* padding: 20px; */
 }
 
 nav {
@@ -37,7 +35,6 @@ nav {
 	right: 0;
 	display: flex;
 	justify-content: right;
-	width: 100%;
     padding-right: 20px;
 }
 
@@ -73,7 +70,7 @@ a:hover {
 .logo {
 	background: url("../assets/back_up.png") #ffc700 no-repeat;
 	background-size: 700px;
-	max-width: 1400px;
+	max-width: 800px;
 	width: 100%;
 	height: 300px;
 	transition: all 0.5s;

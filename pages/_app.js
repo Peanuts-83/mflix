@@ -34,7 +34,7 @@ export default function App({ Component, pageProps }) {
                 <header>
                     <nav>
                         <a className='nav' title='Intentions' href='#'>
-                            <FontAwesomeIcon icon={faInfoCircle} className='icon'  />
+                            <FontAwesomeIcon icon={faInfoCircle} className='icon' />
                             <p className="icon_text">
                                 Intentions
                             </p>
@@ -46,8 +46,12 @@ export default function App({ Component, pageProps }) {
                             </p>
                         </a>
                     </nav>
-                    <div className="logo">
-                    </div>
+                    <Link href='/'>
+                        <a>
+                            <div className="logo">
+                            </div>
+                        </a>
+                    </Link>
                     <div className="search">
                         <div className="white_bg">
                             <form className="form" action="">
