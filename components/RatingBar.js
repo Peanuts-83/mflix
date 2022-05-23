@@ -34,9 +34,9 @@ const RatingBar = () => {
     }
 
     function handleResize() {
-        setStartX(`${(((start.current.clientWidth - 32) / 5) * startValue) + 28}px`)
+        setStartX(`${(((start.current.clientWidth - 32) / 5) * startValue) + 25}px`)
         setEndX(startValue !== endValue
-            ? `${(Math.round((end.current.clientWidth - 32) / 5) * endValue) - (Math.round((start.current.clientWidth - 32) / 5) * startValue) - 24}px`
+            ? `${(Math.round((end.current.clientWidth - 32) / 5) * endValue) - (Math.round((start.current.clientWidth - 32) / 5) * startValue) - 10}px`
             : '0')
     }
 

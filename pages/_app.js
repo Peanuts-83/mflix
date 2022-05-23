@@ -33,14 +33,14 @@ export default function App({ Component, pageProps }) {
             <main>
                 <header>
                     <nav>
-                        <a className="icon" title='Intentions' href='#'>
-                            <FontAwesomeIcon icon={faInfoCircle} />
+                        <a className='nav' title='Intentions' href='#'>
+                            <FontAwesomeIcon icon={faInfoCircle} className='icon'  />
                             <p className="icon_text">
                                 Intentions
                             </p>
                         </a>
-                        <a className="icon" title='Contact' href='mailto:tranque@free.fr'>
-                            <FontAwesomeIcon icon={faEnvelope} />
+                        <a className='nav' title='Contact' href='mailto:tranque@free.fr'>
+                            <FontAwesomeIcon icon={faEnvelope} className='icon' />
                             <p className="icon_text">
                                 Contact
                             </p>
@@ -59,7 +59,7 @@ export default function App({ Component, pageProps }) {
                                 </select>
                                 <label htmlFor="director">Director</label>
                                 <input type="text" id='director' />
-                                <label htmlFor="ratings">Ratings</label>
+                                <label htmlFor="ratings">Rating Stars</label>
                                 <RatingBar id='ratings' />
 
                                 <button type="submit">SEARCH</button>

@@ -59,9 +59,15 @@ a:hover {
     cursor: pointer;
 }
 
-.icon {
+.nav {
     display: flex;
     align-items: center;
+}
+
+.icon {
+	padding: 3px;
+	background-color: white;
+	border-radius: 50%;
 }
 
 .logo {
