@@ -61,11 +61,11 @@ const RatingBar = () => {
         const rect = start.current.getBoundingClientRect()
         console.log('POSX', rect.left)
         outputStart.current.style.left = startValue === 10
-            ? `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - startValue}px`
-            :  `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - startValue * .5}px`
+            ? `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - 13}px`
+            : `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - ( startValue * 2.4 - 10) * .7}px`
         outputEnd.current.style.left = endValue === 10
-    ? `${(Math.round((end.current.clientWidth - 32) / 10) * endValue) - endValue *.05 }px`
-            :  `${(Math.round((end.current.clientWidth - 40) / 10) * endValue) + endValue *.5}px`
+            ? `${(Math.round((end.current.clientWidth - 32) / 10) * endValue) - 13}px`
+            : `${(Math.round((end.current.clientWidth - 40) / 10) * endValue) - (endValue - 10) * .7}px`
         handleResize()
     }, [startValue, endValue, endX])
 
