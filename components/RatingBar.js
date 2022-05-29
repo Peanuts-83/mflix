@@ -33,10 +33,12 @@ const RatingBar = () => {
     }
 
     function handleResize() {
-        setStartX(`${(((start.current.clientWidth - 32) / 10) * startValue) + 25}px`)
-        setEndX(startValue !== endValue
-            ? `${(Math.round((end.current.clientWidth - 32) / 10) * endValue) - (Math.round((start.current.clientWidth - 32) / 10) * startValue) - 10}px`
-            : '0')
+        if (start.current && start.current !== null) {
+            setStartX(`${(((start.current.clientWidth - 32) / 10) * startValue) + 25}px`)
+            setEndX(startValue !== endValue
+                ? `${(Math.round((end.current.clientWidth - 32) / 10) * endValue) - (Math.round((start.current.clientWidth - 32) / 10) * startValue) - 10}px`
+                : '0')
+        }
     }
 
     useEffect(() => {
@@ -62,7 +64,7 @@ const RatingBar = () => {
         console.log('POSX', rect.left)
         outputStart.current.style.left = startValue === 10
             ? `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - 13}px`
-            : `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - ( startValue * 2.4 - 10) * .7}px`
+            : `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - (startValue * 2.4 - 10) * .7}px`
         outputEnd.current.style.left = endValue === 10
             ? `${(Math.round((end.current.clientWidth - 32) / 10) * endValue) - 13}px`
             : `${(Math.round((end.current.clientWidth - 40) / 10) * endValue) - (endValue - 10) * .7}px`
