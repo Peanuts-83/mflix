@@ -51,14 +51,20 @@ export async function getStaticProps() {
 
     const movies = await db
         .collection('movies')
-        .find({})
-        .sort({ 'imdb.rating': -1 })
-        .filter({ 'imdb.rating': { $ne: '' } })
+        // .find({})
+        // .sort({ 'imdb.rating': -1 })
+        // .filter({ 'imdb.rating': { $ne: '' } })
+        .aggregate([
+            {$sort: {'imdb.rating': -1}},
+            {$match: {'imdb.rating': {$ne: ''}}},
+            // {$project: ($distinct('title'))}
+            // {$group: {_id: '$runtime'}}
+        ])
         .limit(20)
         .toArray()
     // .distinct("title")
 
-    console.log('ARray', movies);
+    // console.log('ARray', movies);
     return {
         props: {
             movies: JSON.parse(JSON.stringify(movies))
