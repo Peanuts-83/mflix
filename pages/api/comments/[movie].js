@@ -7,7 +7,7 @@ export default async function (req, res) {
     const { movie } = req.query
     let [type, target] = movie.split('&')
     target = decodeURIComponent(target)
-    console.log(type, target);
+    console.log('Type & target', type, target);
     if (target === '') return
 
     let obj_id, data
@@ -22,7 +22,7 @@ export default async function (req, res) {
                 .sort({ date: -1 })
                 .toArray()
             break
-        case 'name':
+        case /name/:
             console.log('NAME', target);
             const [movie] = await db
                 .collection('movies')

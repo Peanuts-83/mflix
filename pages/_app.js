@@ -2,28 +2,15 @@ import Head from "next/head"
 import logo from 'assets/back_up.png'
 import Image from 'next/image'
 import Link from "next/link"
-import RatingBar from "components/RatingBar"
 import 'styles/app.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { useState } from "react"
+import axios from "axios"
+// import { connectToDatabase } from "util/mongodb"
+import SearchForm from "components/SearchForm"
 
-export default function App({ Component, pageProps }) {
-    const navLinks = [
-        {
-            name: 'Movies',
-            path: '/Movies'
-        }, {
-            name: 'Top',
-            path: '/Top'
-        }, {
-            name: 'Comments',
-            path: '/Comments'
-        }
-    ]
-
-    function showIntentions() {
-
-    }
+export default function App({ Component, pageProps, genresList }) {
 
     return (
         <div>
@@ -46,30 +33,15 @@ export default function App({ Component, pageProps }) {
                             </p>
                         </a>
                     </nav>
-                    <Link href='/'>
-                        <a>
-                            <div className="logo">
-                            </div>
-                        </a>
-                    </Link>
-                    <div className="search">
-                        <div className="white_bg">
-                            <form className="form" action="">
-                                <label htmlFor="title">Movie Title</label>
-                                <input type="text" id='title' />
-                                <label htmlFor="genre">Genre</label>
-                                <select id='genre'>
-                                    <option value="">Choose a genre</option>
-                                </select>
-                                <label htmlFor="director">Director</label>
-                                <input type="text" id='director' />
-                                <label htmlFor="ratings">Rating Stars</label>
-                                <RatingBar id='ratings' />
-
-                                <button type="submit">SEARCH</button>
-                            </form>
-                        </div>
+                    <div className="top">
+                        <Link href='/'>
+                            <a>
+                                <div className="logo">
+                                </div>
+                            </a>
+                        </Link>
                     </div>
+                    <SearchForm genresList={genresList} />
                 </header>
                 <Component className='component' {...pageProps} />
                 <div className="spacer"></div>
@@ -78,3 +50,28 @@ export default function App({ Component, pageProps }) {
         </div>
     )
 }
+
+// _app.getInitialProps = async (ctx) => {
+//     const { db } = await connectToDatabase()
+
+//     let genres = await db
+//         .collection('movies')
+//         .aggregate([
+//             { $unwind: "$genres" },
+//             {
+//                 $group: {
+//                     _id: "genres"
+//                 }
+//             },
+//             { $sort: { _id: 1 } }
+//         ])
+
+//     // genres = Object.values(genres).map(e => e)
+//     console.log('GENRES -', genres)
+
+//     return {
+//         props: {
+//             genresList: JSON.parse(JSON.stringify(genres))
+//         }
+//     }
+// }

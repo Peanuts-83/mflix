@@ -1,6 +1,7 @@
 import style from 'styles/components/ratingBar.module.css'
 import { useRef, useState, useEffect } from 'react'
 
+// TIMER function to limit the number of refresh window width
 function debounce(fn, ms) {
     let timer
     return _ => {
@@ -12,26 +13,31 @@ function debounce(fn, ms) {
     };
 }
 
-
-const RatingBar = () => {
+/**
+ * RatingBar component
+ * @param {function} returnRatings - Setter to send back min/max ratings to parent component
+ * @returns min & max rating range search
+ */
+ export default function RatingBar ({ returnRatings }) {
     const start = useRef()
     const end = useRef()
     const outputStart = useRef()
     const outputEnd = useRef()
     const gap = useRef()
+    // Xpos of both min & max buttons
     const [startX, setStartX] = useState('0px')
     const [endX, setEndX] = useState('0px')
 
+    // MIN & MAX values to be returned
     const [startValue, setStartValue] = useState(0)
     const [endValue, setEndValue] = useState(10)
 
+    // Do nothing on SSR, act only on CSR
     if (typeof window !== 'undefined') {
         window.addEventListener('resize', debounce(handleResize, 50))
-        // return _ => {
-        //     window.removeEventListener('resize', handleResize)
-        // }
     }
 
+    // Calculate Xpos for min & max buttons
     function handleResize() {
         if (start.current && start.current !== null) {
             setStartX(`${(((start.current.clientWidth - 32) / 10) * startValue) + 25}px`)
@@ -41,27 +47,29 @@ const RatingBar = () => {
         }
     }
 
+    // RETURN min & max values to parent component
+    useEffect(() => {
+        returnRatings([startValue, endValue])
+    }, [startValue, endValue])
+
+    // SET yellow bar length & Xpos between min & max buttons
     useEffect(() => {
         gap.current.style.left = startX
         gap.current.style.width = endX
     }, [startX, endX])
 
+    // Calculate Xpos of each button on user's actions depending on window width
     useEffect(() => {
-        // console.log('START', startValue, 'END', endValue);
         if (startValue > endValue) {
-            // console.log(('SUP'));
             setEndValue(startValue)
             setStartValue(endValue)
         }
         if (startValue === endValue) {
-            // console.log('===', startValue, endValue);
             outputEnd.current.style.display = 'none'
         } else {
-            // console.log('!==');
             outputEnd.current.style.display = 'block'
         }
         const rect = start.current.getBoundingClientRect()
-        // console.log('POSX', rect.left)
         outputStart.current.style.left = startValue === 10
             ? `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - 13}px`
             : `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - (startValue * 2.4 - 10) * .7}px`
@@ -71,14 +79,11 @@ const RatingBar = () => {
         handleResize()
     }, [startValue, endValue, endX])
 
+    // SET min or max value depending on user's action
     function changeValue(e, cursor) {
-        // console.log('CURSOR', cursor, startValue, endValue);
         cursor === 'start' ? setStartValue(+e.target.value) : setEndValue(+e.target.value)
     }
 
-    // function chooseRange(e) {
-    //     console.log(e.target.value)
-    // }
 
     return (
         <>
@@ -93,7 +98,6 @@ const RatingBar = () => {
                     title={startValue}
                     id={style.start}
                     className={style.bar}
-                    // onMouseOver={chooseRange}
                     onChange={(e) => changeValue(e, 'start')}
                     ref={start}
                 />
@@ -104,7 +108,6 @@ const RatingBar = () => {
                     title={endValue}
                     id={style.end}
                     className={style.bar}
-                    // onMouseOver={chooseRange}
                     onChange={(e) => changeValue(e, 'end')}
                     ref={end}
                 />
@@ -112,5 +115,3 @@ const RatingBar = () => {
         </>
     )
 }
-
-export default RatingBar

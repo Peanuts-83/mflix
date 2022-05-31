@@ -5,7 +5,6 @@ import axios from "axios";
 import { fetcher } from "util/fetcher";
 import { useRef, useState, useEffect } from "react";
 import style from 'styles/results.module.css'
-// import { ObjectId } from "mongodb"
 
 export default function Comments({ comments, movies }) {
     const results = useRef(null)
@@ -20,13 +19,15 @@ export default function Comments({ comments, movies }) {
         const selectedReq = encodeURIComponent(selected)
         console.log('ReqTitle -', selectedReq);
         if (selected !== '') {
-            axios.get(`/api/comments/name&${selectedReq}`).then(res => setData(res.data))
+            axios
+                .get(`/api/comments/name&${selectedReq}`)
+                .then(res => setData(res.data))
         }
     }, [selected])
 
-    useEffect(() => console.log('DATA -', data), [data])
+    // useEffect(() => console.log('DATA -', data), [data])
 
-    useEffect(() => console.log(('COMMENTSDATA -', movieId)))
+    // useEffect(() => console.log(('COMMENTSDATA -', movieId)))
 
     function exposeComments(movie_id) {
         setMovieId(movie_id)
