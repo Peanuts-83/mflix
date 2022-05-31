@@ -21,13 +21,16 @@ export default function Movies({ movies }) {
                                 fallback={default_movie}
                                 width={200}
                                 height={250}
-                            // alt='Affiche'
+                                layout='responsive'
+                                alt='Affiche'
                             />
 
                         ) : (
-                            <img
+                            <Image
                                 src={default_movie}
-                                layout='fill'
+                                layout='responsive'
+                                width={200}
+                                height={250}
                             />
                         )}
                         <div className={style.txtAffiche}>
@@ -51,20 +54,23 @@ export async function getStaticProps() {
 
     const movies = await db
         .collection('movies')
-        // .find({})
-        // .sort({ 'imdb.rating': -1 })
-        // .filter({ 'imdb.rating': { $ne: '' } })
         .aggregate([
-            {$sort: {'imdb.rating': -1}},
-            {$match: {'imdb.rating': {$ne: ''}}},
-            // {$project: ($distinct('title'))}
-            // {$group: {_id: '$runtime'}}
+            { $match: { 'imdb.rating': { $ne: '' } } },
+            {
+                $group: {
+                    _id: '$title',
+                    title: { $first: "$title" },
+                    plot: { $first: "$plot" },
+                    imdb: { $first: "$imdb" },
+                    poster: { $first: "$poster" },
+                }
+            },
+            { $sort: { 'imdb.rating': -1, 'year': -1, 'title': -1 } }
         ])
         .limit(20)
         .toArray()
-    // .distinct("title")
 
-    // console.log('ARray', movies);
+    console.log('ARray', movies.map(m => `${m.title} >> ${m.poster}`));
     return {
         props: {
             movies: JSON.parse(JSON.stringify(movies))

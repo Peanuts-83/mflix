@@ -47,21 +47,21 @@ const RatingBar = () => {
     }, [startX, endX])
 
     useEffect(() => {
-        console.log('START', startValue, 'END', endValue);
+        // console.log('START', startValue, 'END', endValue);
         if (startValue > endValue) {
-            console.log(('SUP'));
+            // console.log(('SUP'));
             setEndValue(startValue)
             setStartValue(endValue)
         }
         if (startValue === endValue) {
-            console.log('===', startValue, endValue);
+            // console.log('===', startValue, endValue);
             outputEnd.current.style.display = 'none'
         } else {
-            console.log('!==');
+            // console.log('!==');
             outputEnd.current.style.display = 'block'
         }
         const rect = start.current.getBoundingClientRect()
-        console.log('POSX', rect.left)
+        // console.log('POSX', rect.left)
         outputStart.current.style.left = startValue === 10
             ? `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - 13}px`
             : `${(Math.round((start.current.clientWidth - 30) / 10) * startValue) - (startValue * 2.4 - 10) * .7}px`
@@ -72,13 +72,13 @@ const RatingBar = () => {
     }, [startValue, endValue, endX])
 
     function changeValue(e, cursor) {
-        console.log('CURSOR', cursor, startValue, endValue);
+        // console.log('CURSOR', cursor, startValue, endValue);
         cursor === 'start' ? setStartValue(+e.target.value) : setEndValue(+e.target.value)
     }
 
-    function chooseRange(e) {
-        console.log(e.target.value)
-    }
+    // function chooseRange(e) {
+    //     console.log(e.target.value)
+    // }
 
     return (
         <>
@@ -93,7 +93,7 @@ const RatingBar = () => {
                     title={startValue}
                     id={style.start}
                     className={style.bar}
-                    onMouseOver={chooseRange}
+                    // onMouseOver={chooseRange}
                     onChange={(e) => changeValue(e, 'start')}
                     ref={start}
                 />
@@ -104,7 +104,7 @@ const RatingBar = () => {
                     title={endValue}
                     id={style.end}
                     className={style.bar}
-                    onMouseOver={chooseRange}
+                    // onMouseOver={chooseRange}
                     onChange={(e) => changeValue(e, 'end')}
                     ref={end}
                 />
