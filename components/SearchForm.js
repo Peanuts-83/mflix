@@ -3,18 +3,18 @@ import axios from "axios"
 import RatingBar from "./RatingBar"
 // import { connectToDatabase } from "util/mongodb"
 
-export default function SearchForm() {
+export default function SearchForm({setMovies, setComments}) {
+    // Genres available for SELECT
+    const [genres, setGenres] = useState([])
+
     // FORM requested values
     const [reqTitle, setReqTitle] = useState('')
-    const [reqGenre, setReqGenre] = useState('xx')
+    const [reqGenre, setReqGenre] = useState('')
     const [reqDirector, setReqDirector] = useState('')
     const [reqRating, setReqRating] = useState([])
 
-
     // RESPONSE values
     const [movieIds, setMovieIds] = useState([])
-    const [comments, setComments] = useState([])
-    const [genres, setGenres] = useState([])
     const [directors, setDirectors] = useState([])
     const [ratings, setRatings] = useState([])
 
@@ -22,6 +22,7 @@ export default function SearchForm() {
     const [request, setRequest] = useState()
     const [showReq, setShowReq] = useState(false)
 
+    // GET genres list
     useEffect(async () => {
         if (genres.length === 0) {
             const response = await axios.get(`/api/genres`)
@@ -30,6 +31,7 @@ export default function SearchForm() {
         }
     }, [genres])
 
+    // BUILD REQUEST
     useEffect(() => {
         const ratingRange = []
         for (let i = reqRating[0]; i <= reqRating[1]; i++) {
@@ -38,23 +40,25 @@ export default function SearchForm() {
         setRequest(`title=${reqTitle.toLowerCase()}&genre=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`)
     }, [reqTitle, reqDirector, reqGenre, reqRating])
 
+    // GET comments
     async function getComments(e) {
         e.preventDefault()
-        console.log('GENRES -', genres)
-        const encodedReqTitle = encodeURIComponent(reqTitle)
-        const response = await axios.get(`/api/comments/name&${encodedReqTitle}`)
+        const encodedRequest = encodeURIComponent(request)
+        console.log('Getting comments...')
+        const response = await axios.get(`/api/comments/${encodedRequest}`)
         const data = await response.data
-        setComments(data)
-        const ids = []
-        data
-            .map(e => e.movie_id)
-            .forEach(e => {
-                if (!ids.includes(e)) {
-                    ids.push(e)
-                }
-            })
-        setMovieIds(ids)
-        console.log('COMMENTS -', ids)
+        setComments(data.comments)
+        setMovies(data.movies)
+        // const ids = []
+        // data
+        //     .map(e => e.movie_id)
+        //     .forEach(e => {
+        //         if (!ids.includes(e)) {
+        //             ids.push(e)
+        //         }
+        //     })
+        // setMovieIds(ids)
+        // console.log('COMMENTS -', ids)
     }
 
     return (
