@@ -1,11 +1,7 @@
 import Head from "next/head"
 import Layout from 'components/layout'
-import logo from 'assets/back_up.png'
-import Image from 'next/image'
 import 'styles/app.css'
 import { useState, useEffect } from "react"
-import axios from "axios"
-// import { connectToDatabase } from "util/mongodb"
 
 export default function App({ Component }) {
     const [comments, setComments] = useState('Base comments')

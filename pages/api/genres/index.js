@@ -17,6 +17,5 @@ export default async function (req, res) {
     ])
     .toArray()
 
-    console.log('genres form api', genresList);
   res.json(genresList.map(e => e['_id']))
 }

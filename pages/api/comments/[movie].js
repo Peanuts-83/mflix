@@ -39,6 +39,7 @@ export default async function (req, res) {
                         directors: "$directors",
                         rating: "$imdb.rating"
                     })
+                    .limit(10)
             ]
             data.comments = [
                 await db
@@ -94,5 +95,6 @@ export default async function (req, res) {
             return
     }
 
+    console.log(('DATA', data));
     res.json(data)
 }

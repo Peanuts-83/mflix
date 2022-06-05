@@ -3,8 +3,28 @@ import axios from "axios"
 import RatingBar from "./RatingBar"
 import { useRequest } from 'util/useRequest'
 
-export default function SearchForm({ setMovies, setComments }) {
-    const {data: genres, error} = useRequest('/api/genres')
+export default function SearchForm({ setMovies, setComments, setLoading }) {
+    // Genres available for SELECT
+    const { data: genres, genresErr } = useRequest('/api/genres')
+
+    // REQUEST
+    const [request, setRequest] = useState('')
+    const [showReq, setShowReq] = useState(false)
+
+
+    // const [sendRequest, setSendRequest] = useState(false)
+    const { data: movies, error: moviesErr, isLoading: moviesLoad } = useRequest(`/api/movies/${request}`)
+
+    useEffect(() => {
+        switch (moviesLoad) {
+            case true:
+                console.log('LOADING')
+                setLoading(true)
+                break
+            default:
+                setLoading(false)
+        }
+    }, [moviesLoad])
 
     // FORM requested values
     const [reqTitle, setReqTitle] = useState('')
@@ -17,31 +37,43 @@ export default function SearchForm({ setMovies, setComments }) {
     const [directors, setDirectors] = useState([])
     const [ratings, setRatings] = useState([])
 
-    // REQUEST
-    const [request, setRequest] = useState()
-    const [showReq, setShowReq] = useState(false)
 
-
-    useEffect(() => console.log('GENRES from search', genres, error), [])
+    useEffect(() => console.log('GENRES from search', genres, genresErr), [genres])
+    useEffect(() => {
+        console.table('MOVIES from search', movies, moviesErr)
+        setMovies(movies)
+    }, [movies])
 
     // BUILD REQUEST
+    // useEffect(() => {
+    //     const ratingRange = []
+    //     for (let i = reqRating[0]; i <= reqRating[1]; i++) {
+    //         ratingRange.push(i)
+    //     }
+    //     setRequest(encodeURIComponent(`title=${reqTitle.toLowerCase()}&genre=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`))
+    // }, [reqTitle, reqDirector, reqGenre, reqRating])
+
     useEffect(() => {
-        const ratingRange = []
-        for (let i = reqRating[0]; i <= reqRating[1]; i++) {
-            ratingRange.push(i)
-        }
-        setRequest(`title=${reqTitle.toLowerCase()}&genre=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`)
-    }, [reqTitle, reqDirector, reqGenre, reqRating])
+
+    }, [request])
 
     // GET comments
     async function getComments(e) {
         e.preventDefault()
-        const encodedRequest = encodeURIComponent(request)
-        console.log('Getting comments...')
-        const response = await axios.get(`/api/comments/${encodedRequest}`)
-        const data = await response.data
-        setComments(data.comments)
-        setMovies(data.movies)
+        const ratingRange = []
+        for (let i = reqRating[0]; i <= reqRating[1]; i++) {
+            ratingRange.push(i)
+        }
+        setRequest(encodeURIComponent(`title=${reqTitle.toLowerCase()}&genre=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`))
+        console.log('REQUEST', request)
+        // setSendRequest(true)
+        // const encodedRequest = encodeURIComponent(request)
+        // console.log('Getting comments...')
+        // const response = await axios.get(`/api/comments/${request}`)
+        // const data = await response.data
+        // setComments(data.comments)
+        // setMovies(data.movies)
+
         // const ids = []
         // data
         //     .map(e => e.movie_id)

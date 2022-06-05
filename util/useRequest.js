@@ -7,9 +7,12 @@ function fetcher(...args) {
 
 export function useRequest(url) {
     if (!url) {
-        throw new Error(`Wrong fetcher call with URL: ${url}`)
+        // throw new Error(`Wrong fetcher call with URL: ${url}`)
+        return {data: null}
     }
 
-    const { data, error, loading } = useSWR(url, fetcher)
-    return { data, error, loading }
+    if (url === '') return {data: null}
+
+    const { data, error } = useSWR(url, fetcher)
+    return { data, error, isLoading: !data && !error }
 }
