@@ -4,7 +4,7 @@ import 'styles/app.css'
 import { useState, useEffect } from "react"
 
 export default function App({ Component }) {
-    const [comments, setComments] = useState('Base comments')
+    // const [comments, setComments] = useState('Base comments')
     const [movies, setMovies] = useState()
 
     return (
@@ -13,8 +13,8 @@ export default function App({ Component }) {
                 <title>MFLIX - Make up your advice</title>
             </Head>
 
-            <Layout setComments={setComments} setMovies={setMovies} >
-                <Component props={{comments, movies}} />
+            <Layout setMovies={setMovies} >
+                <Component props={{ movies }} />
             </Layout>
 
         </div>

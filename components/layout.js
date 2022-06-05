@@ -5,7 +5,7 @@ import Link from "next/link"
 import SearchForm from "./SearchForm"
 import LoadingModal from 'components/LoadingModal'
 
-export default function Layout({ children, setComments, setMovies }) {
+export default function Layout({ children, setMovies }) {
     const [loading, setLoading] = useState(false)
 
     return (
@@ -34,7 +34,7 @@ export default function Layout({ children, setComments, setMovies }) {
                             </a>
                         </Link>
                     </div>
-                    <SearchForm setComments={setComments} setMovies={setMovies} setLoading={setLoading} />
+                    <SearchForm setMovies={setMovies} setLoading={setLoading} />
                 </header>
                 <main>
                     {children}

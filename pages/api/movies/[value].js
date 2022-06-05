@@ -69,7 +69,7 @@ export default async function (req, res) {
                 })
                 // .limit(500)
                 .toArray()
-            console.log('MOVIES found -', movies.map(e => e.year).filter(e=> String(e).includes('è')))
+            console.log('MOVIES found -', movies.map(e => e.year).filter(e => String(e).includes('è')))
     }
 
     res.json(movies)
