@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import Link from "next/link"
 import SearchForm from "./SearchForm"
+import { useRequest } from 'util/useRequest'
 
-export default function layout({ children, setComments, setMovies }) {
+export default function Layout({ children, setComments, setMovies }) {
+
+    // const { genres, error } = useRequest('/api/genres')
+    // const [genres, setGenres] = useState(genresList)
+    // useEffect(() => console.log('GENRES from layout', genres), [genres])
+
     return (
         <>
             <header>
@@ -40,3 +46,29 @@ export default function layout({ children, setComments, setMovies }) {
         </>
     )
 }
+
+// export async function getStaticProps() {
+//     const { db } = await connectToDatabase()
+
+//     let genres = await db
+//         .collection('movies')
+//         .aggregate([
+//             { $unwind: "$genres" },
+//             {
+//                 $group: {
+//                     _id: "genres"
+//                 }
+//             },
+//             { $sort: { _id: 1 } }
+//         ])
+//         .toArray()
+
+//     // genres = Object.values(genres).map(e => e)
+//     console.log('GENRES -', genres)
+
+//     return {
+//         props: {
+//             genresList: JSON.parse(JSON.stringify(genres))
+//         }
+//     }
+// }

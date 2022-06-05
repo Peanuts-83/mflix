@@ -17,7 +17,7 @@ export default function App({ Component }) {
                 <title>MFLIX - Make up your advice</title>
             </Head>
 
-            <Layout setComments={setComments} setMovies={setMovies}>
+            <Layout setComments={setComments} setMovies={setMovies} >
                 <Component props={{comments, movies}} />
             </Layout>
 

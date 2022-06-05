@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from "axios"
 import RatingBar from "./RatingBar"
-// import { connectToDatabase } from "util/mongodb"
+import { useRequest } from 'util/useRequest'
 
-export default function SearchForm({setMovies, setComments}) {
-    // Genres available for SELECT
-    const [genres, setGenres] = useState([])
+export default function SearchForm({ setMovies, setComments }) {
+    const {data: genres, error} = useRequest('/api/genres')
 
     // FORM requested values
     const [reqTitle, setReqTitle] = useState('')
@@ -22,14 +21,8 @@ export default function SearchForm({setMovies, setComments}) {
     const [request, setRequest] = useState()
     const [showReq, setShowReq] = useState(false)
 
-    // GET genres list
-    useEffect(async () => {
-        if (genres.length === 0) {
-            const response = await axios.get(`/api/genres`)
-            const genresList = response.data
-            setGenres(genresList)
-        }
-    }, [genres])
+
+    useEffect(() => console.log('GENRES from search', genres, error), [])
 
     // BUILD REQUEST
     useEffect(() => {
@@ -70,7 +63,7 @@ export default function SearchForm({setMovies, setComments}) {
                     <label htmlFor="genre">Genre</label>
                     <select id='genre' onChange={e => setReqGenre(e.target.value)}>
                         <option value="">Choose a genre</option>
-                        {genres && genres.map((genre, i) => (
+                        {genres?.map((genre, i) => (
                             <option value={genre.toLowerCase()} key={i}>{genre}</option>
                         ))}
                     </select>
