@@ -1,0 +1,289 @@
+@import "./library";
+
+.sortBy {
+    display: flex;
+    padding: 20px;
+    color: $link;
+    font-size: 1em;
+    transition: all .5s;
+
+    .sortByTitle {
+        color: white;
+        background-color: $link;
+        padding: 10px;
+        border: 1px solid $link;
+    }
+
+    .sortLink {
+        border: 1px solid $link;
+        padding: 10px;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+            background: $lightLink ;
+        }
+    }
+
+    .selected {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+}
+
+.ulMain {
+    list-style: none;
+    padding: 0 5%;
+    transition: all .5s;
+
+    .liMain {
+        .movie {
+            border-radius: 20px;
+            display: flex;
+            align-items: flex-end;
+            background-color: $yellow;
+
+            .img {
+                flex-shrink: 0;
+                max-width: 300px;
+                width: 100%;
+                min-height: 100% !important;
+                // background-color: red;
+            }
+
+            .title {
+                display: grid;
+                grid-template-columns: 3fr 1fr;
+                flex: 1;
+                width: 100%;
+
+                h1 {
+                    padding: 0 20px;
+                }
+
+                h2 {
+                    align-self: flex-end;
+                }
+
+                .avgAndDirectors {
+                    padding: 10px 20px;
+                    display: flex;
+                    color: white;
+                    background-color: black;
+
+                    .avg {
+                        display: flex;
+                        flex-direction: column;
+                        border: 1px solid white;
+                        padding: 5px;
+                        text-align: center;
+
+                        .avgNum {
+                            font-size: 60px;
+                            // line-height: -60px;
+                        }
+                    }
+
+                    .directors {
+                        display: flex;
+                        width: 100%;
+                        justify-content: flex-end;
+                        padding: 5px;
+
+                        * {
+                            padding-left: 10px;
+                        }
+                    }
+                }
+
+                .genres {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-end;
+                    color: white;
+                    background-color: black;
+                    font-weight: bold;
+                    padding: 10px 20px;
+                    line-height: 1.5em;
+                }
+            }
+        }
+
+        .ulComment {
+            padding: 10px 20px 30px 20px;
+            margin: 0 0 20px 0;
+            background-color: $lightGrey;
+            border-radius: 0 0 0 20px;
+
+            .liComment {
+                padding: 10px 0;
+                list-style: none;
+            }
+        }
+    }
+}
+
+.userName {
+    font-size: 1.2em;
+    line-height: 1.5em;
+    color: $link;
+
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}
+
+.cite {
+    padding-left: 15px;
+}
+
+@media screen and (max-width: 992px) {
+    .sortBy {
+        font-size: .8em;
+
+        .sortByTitle {
+            padding: 5px;
+        }
+
+        .sortLink {
+            padding: 5px;
+        }
+    }
+
+    .ulMain {
+        padding: 0 3%;
+        font-size: .8em;
+
+        .liMain {
+            .movie {
+                // display: flex;
+                // flex-direction: column;
+                border-radius: 10px;
+
+                .img {
+                    width: 200px;
+                    min-height: 100% !important;
+                }
+
+                .title {
+
+                    h1 {
+                        padding-left: 0 20px;
+                    }
+
+                    h2 {
+                        padding-right: 0 20px;
+                    }
+
+                    .avgAndDirectors {
+                        padding: 5px 20px;
+
+                        .avg {
+                            .avgNum {
+                                font-size: 40px;
+                            }
+                        }
+
+                        .directors {
+                            * {
+                                padding-left: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .ulComment {
+                font-size: .8em;
+                border-radius: 0 0 0 10px;
+
+                .liComment {
+                    padding: 5px 0;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .sortBy {
+        font-size: .8em;
+
+        .sortByTitle {
+            padding: 5px;
+        }
+
+        .sortLink {
+            padding: 5px;
+        }
+    }
+
+    .ulMain {
+        padding: 0 3%;
+        font-size: .8em;
+
+        .liMain {
+            .movie {
+                display: flex;
+                flex-direction: column;
+                border-radius: 10px;
+
+                .img {
+                    max-width: 100%;
+                    width: 100%;
+                    min-height: 100% !important;
+                    border-radius: 0 10px 0 0;
+                    border: 1px solid black;
+                    border-bottom: 0;
+                }
+
+                .affiche {
+                    border-radius: 0 10px 0 0;
+                }
+
+                .title {
+                    grid-template-columns: 1fr;
+                    h1 {
+                        padding-left: 0 20px;
+                    }
+
+                    h2 {
+                        padding-right: 0 20px;
+                    }
+
+                    .avgAndDirectors {
+                        padding: 5px 20px;
+
+                        .avg {
+                            .avgNum {
+                                font-size: 40px;
+                            }
+                        }
+
+                        .directors {
+                            flex-direction: column;
+                            align-items: flex-end;
+                            justify-content: flex-start
+                            ;
+                            * {
+
+                                padding-left: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .ulComment {
+                font-size: .8em;
+                border-radius: 0 0 0 10px;
+
+                .liComment {
+                    padding: 5px 0;
+                }
+            }
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import style from 'styles/modal.module.css'
+import style from 'styles/modal.module.scss'
 
 export default function LoadingModal() {
 

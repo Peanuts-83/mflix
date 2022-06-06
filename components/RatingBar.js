@@ -1,4 +1,4 @@
-import style from 'styles/components/ratingBar.module.css'
+import style from 'styles/components/ratingBar.module.scss'
 import { useRef, useState, useEffect } from 'react'
 
 // TIMER function to limit the number of refresh window width

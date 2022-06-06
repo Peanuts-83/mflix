@@ -1,7 +1,7 @@
 import { connectToDatabase } from "../util/mongodb"
 import ImageWithFallback from "components/ImageWithFallback"
 import default_movie from 'assets/default_movie.png'
-import style from 'styles/results.module.css'
+import style from 'styles/results.module.scss'
 import Image from 'next/image'
 
 export default function Movies({ movies }) {

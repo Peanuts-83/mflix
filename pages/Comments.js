@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import axios from "axios";
 import { fetcher } from "util/fetcher";
 import { useRef, useState, useEffect } from "react";
-import style from 'styles/results.module.css'
+import style from 'styles/results.module.scss'
 
 export default function Comments({ comments, movies }) {
     const results = useRef(null)

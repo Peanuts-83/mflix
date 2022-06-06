@@ -1,5 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRequest } from 'util/useRequest'
+import style from 'styles/index.module.scss'
+import default_movie from 'assets/default_movie.png'
+import Image from 'next/image'
+import ImageWithFallback from 'components/ImageWithFallback'
 
 export default function Home({ props }) {
 
@@ -19,9 +23,12 @@ export default function Home({ props }) {
     const { movies } = props
     const { data: comments, error: commentsErr, isLoading: loading } = useRequest(`/api/comments/${moviesIDList}`)
 
+    // SORT status
+    const [sorter, setSorter] = useState()
+
     // FEED list
     useEffect(() => {
-        setMoviesOL(movies)
+        sortByDate(movies)
     }, [movies])
 
     // BUILD ordered list
@@ -32,35 +39,52 @@ export default function Home({ props }) {
     }, [moviesOL])
 
     function sortByDate(list = moviesOL) {
-            const res = list.sort((a, b) => {
-                const dateA = a.year.length > 4 ? a.year.split('è')[0] : a.year
-                const dateB = b.year.length > 4 ? b.year.split('è')[0] : b.year
-                if (dateA > dateB) {
-                    return -1
-                } else if (dateA < dateB) {
-                    return 1
-                } else {
-                    return 0
-                }
-            })
-            // console.log('MOVIES from sort by date', res[0])
-            setMoviesOL(res)
-            renderMovies(res)
-        }
+        const res = list.sort((a, b) => {
+            const dateA = a.year.length > 4 ? a.year.split('è')[0] : a.year
+            const dateB = b.year.length > 4 ? b.year.split('è')[0] : b.year
+            if (dateA > dateB) {
+                return -1
+            } else if (dateA < dateB) {
+                return 1
+            } else {
+                return 0
+            }
+        })
+        // console.log('MOVIES from sort by date', res[0])
+        setMoviesOL(res)
+        setSorter('date')
+        renderMovies(res)
+    }
 
     function sortByRating(list = moviesOL) {
-            const res = list.sort((a, b) => {
-                if (a.imdb.rating > b.imdb.rating) {
-                    return -1
-                } else if (a.imdb.rating < b.imdb.rating) {
-                    return 1
-                } else {
-                    return 0
-                }
-            })
-            // console.log('MOVIES from sort by rating', res[0])
-            setMoviesOL(res)
-            renderMovies(res)
+        const res = list.sort((a, b) => {
+            if (a.imdb.rating > b.imdb.rating) {
+                return -1
+            } else if (a.imdb.rating < b.imdb.rating) {
+                return 1
+            } else {
+                return 0
+            }
+        })
+        // console.log('MOVIES from sort by rating', res[0])
+        setMoviesOL(res)
+        setSorter('rating')
+        renderMovies(res)
+    }
+    
+    function sortByTitle(list = moviesOL) {
+        const res = list.sort((a,b) => {
+            if (a.title.toLowerCase() > b.title.toLowerCase()) {
+                return 1
+            } else if (a.title.toLowerCase() < b.title.toLowerCase()) {
+                return -1
+            } else {
+                return 0
+            }
+        })
+        setMoviesOL(res)
+        setSorter('title')
+        renderMovies(res)
     }
 
     function renderMovies(list = moviesOL) {
@@ -68,51 +92,92 @@ export default function Home({ props }) {
     }
 
 
+    //TODO: swap doubles
+
     return (
         <div className="container">
-            <div>
-                Sort by :
-                <div onClick={() => sortByDate()}> Date </div>
+            <div className={style.sortBy}>
+                <div className={style.sortByTitle}>
+                    Sort by
+                </div>
+                <div className={`${style.sortLink} ${sorter === 'date' ? style.selected : ''}`} onClick={() => sortByDate()} > Date </div>
 
-                <div onClick={() => sortByRating()}> Rating </div>
+                <div className={`${style.sortLink} ${sorter === 'rating' ? style.selected : ''}`} onClick={() => sortByRating()} > Rating </div>
+
+                <div className={`${style.sortLink} ${sorter === 'title' ? style.selected : ''}`} onClick={() => sortByTitle()} > Title </div>
             </div>
 
-            <ul>
+            <ul className={style.ulMain}>
                 {moviesOL?.map((movie, i) => {
                     if (i >= movieIndexMin && i < movieIndexMax) {
                         return (
-                            <li key={i}>
-                                <div>
-                                    {i + 1} - {movie.title} / {movie.year}
+                            <li className={style.liMain} key={i}>
+                                <div className={style.movie}>
+                                    <div className={style.img}>
+                                        {movie.poster ? (
+                                            <ImageWithFallback
+                                                className={style.affiche}
+                                                src={movie.poster}
+                                                fallback={default_movie}
+                                                width={200}
+                                                height={250}
+                                                layout='responsive'
+                                                alt='Affiche'
+                                            />
+                                        ) : (
+                                            <Image
+                                                src={default_movie}
+                                                layout='responsive'
+                                                width={200}
+                                                height={250}
+                                            />
+                                        )}
+                                    </div>
+                                    <div className={style.title}>
+                                        <h1>{movie.title}</h1>
+                                        <h2>{movie.year}</h2>
+                                        <div className={style.avgAndDirectors}>
+                                            <div className={style.avg}>
+                                                Average rating  <strong className={style.avgNum}>{movie.imdb.rating}</strong>
+                                            </div>
+                                            <div className={style.directors}>
+                                                <div>
+                                                    Director(s)
+                                                </div>
+                                                {movie.directors && movie.directors.length > 0 ?
+                                                (movie.directors?.map((d, k) => (
+                                                    <div key={k}><strong>{d}</strong></div>
+                                                ))):(
+                                                    <div><em>not provided</em></div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className={style.genres}>
+                                            {movie.genres.map((g, k) => (
+                                                <span key={k}> {g} {k < movie.genres.length - 1 && '/'} </span>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    Average rating : {movie.imdb.rating} - Director(s) : {movie.directors?.map((d, k) => (
-                                        <span key={k}>{d}</span>
-                                    ))}
-                                </div>
-                                <div>
-                                    GENRE :
-                                    {movie.genres.map((g, k) => (
-                                        <span key={k}> {g} {k < movie.genres.length - 1 && '/'} </span>
-                                    ))}
-                                </div>
-                                <ul>
+                                <ul className={style.ulComment}>
                                     {comments ?
                                         comments[movie._id] && comments[movie._id].length > 0 ?
                                             comments[movie._id]?.map((comment, k) => (
-                                                <li key={k}>
-                                                    {comment.text} -
-                                                    <a
-                                                        href="#"
-                                                        title={`See all comments of this user`}>
-                                                        <em> {comment.name} </em>
-                                                    </a>
+                                                <li className={style.liComment} key={k}>
+                                                    <strong
+                                                        className={style.userName}
+                                                        title={`See all comments from ${comment.name}`}> {comment.name}
+                                                    </strong>
+                                                    <br />
+                                                    <cite className={style.cite}>
+                                                        {comment.text}
+                                                    </cite>
                                                 </li>
                                             ))
                                             : (
-                                                <li>NO COMMENTS</li>
+                                                <li className={style.liComment}>NO COMMENTS</li>
                                             ) : (
-                                            <li>NO COMMENT</li>
+                                            <li className={style.liComment}>NO COMMENT</li>
                                         )}
                                 </ul>
                             </li>

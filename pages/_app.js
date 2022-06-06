@@ -1,6 +1,6 @@
 import Head from "next/head"
 import Layout from 'components/layout'
-import 'styles/app.css'
+import 'styles/app.scss'
 import { useState, useEffect } from "react"
 
 export default function App({ Component }) {

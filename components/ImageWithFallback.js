@@ -10,6 +10,11 @@ export default function ImageWithFallback({ src, fallback, ...rest }) {
         setImgSrc(fallback)
     }
 
+    // Manage url change on sorting movies
+    useEffect(() => {
+        setImgSrc(src)
+    }, [src])
+
     return (
         <div>
             <Image
