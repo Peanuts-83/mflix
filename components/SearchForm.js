@@ -3,12 +3,16 @@ import axios from "axios"
 import RatingBar from "./RatingBar"
 import { useRequest } from 'util/useRequest'
 
+
 export default function SearchForm({ setMovies, setComments, setLoading }) {
     // Genres available for SELECT
     const { data: genres, genresErr } = useRequest('/api/genres')
 
-    // REQUEST
+    // REQUEST BUILD
     const [request, setRequest] = useState('')
+
+    // REQUEST DEMO
+    const [requestBuild, setRequestBuild] = useState('')
     const [showReq, setShowReq] = useState(false)
 
 
@@ -18,7 +22,7 @@ export default function SearchForm({ setMovies, setComments, setLoading }) {
     useEffect(() => {
         switch (moviesLoad) {
             case true:
-                console.log('LOADING')
+                // console.log('LOADING')
                 setLoading(true)
                 break
             default:
@@ -32,30 +36,44 @@ export default function SearchForm({ setMovies, setComments, setLoading }) {
     const [reqDirector, setReqDirector] = useState('')
     const [reqRating, setReqRating] = useState([])
 
+    // const [ratingRange, setRatingRange] = useState([])
+
     // RESPONSE values
-    const [movieIds, setMovieIds] = useState([])
-    const [directors, setDirectors] = useState([])
-    const [ratings, setRatings] = useState([])
+    // const [movieIds, setMovieIds] = useState([])
+    // const [directors, setDirectors] = useState([])
+    // const [ratings, setRatings] = useState([])
 
 
-    useEffect(() => console.log('GENRES from search', genres, genresErr), [genres])
+    // useEffect(() => console.log('GENRES from search', genres, genresErr), [genres])
+
     useEffect(() => {
-        console.table('MOVIES from search', movies, moviesErr)
+        // console.table('MOVIES from search', movies, moviesErr)
         setMovies(movies)
     }, [movies])
 
+
     // BUILD REQUEST
-    // useEffect(() => {
-    //     const ratingRange = []
-    //     for (let i = reqRating[0]; i <= reqRating[1]; i++) {
-    //         ratingRange.push(i)
-    //     }
-    //     setRequest(encodeURIComponent(`title=${reqTitle.toLowerCase()}&genre=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`))
-    // }, [reqTitle, reqDirector, reqGenre, reqRating])
-
     useEffect(() => {
+        const ratingRange = []
+        for (let i = reqRating[0]; i <= reqRating[1]; i++) {
+            ratingRange.push(i)
+        }
+        setRequestBuild(`title=${reqTitle.toLowerCase()}&genres=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`)
+    }, [reqTitle, reqDirector, reqGenre, reqRating])
 
-    }, [request])
+    // useEffect(() => {
+    //     buildRatingRange()
+    // }, [reqRating])
+
+    // function buildRatingRange() {
+    //     if (reqRating) {
+    //         console.log('REQRATING', reqRating)
+    //         for (let i = reqRating[0]; i <= reqRating[1]; i++) {
+    //                 ratingRange.push(i)
+    //             }
+    //     }
+    // }
+
 
     // GET comments
     async function getComments(e) {
@@ -64,8 +82,8 @@ export default function SearchForm({ setMovies, setComments, setLoading }) {
         for (let i = reqRating[0]; i <= reqRating[1]; i++) {
             ratingRange.push(i)
         }
-        setRequest(encodeURIComponent(`title=${reqTitle.toLowerCase()}&genre=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`))
-        console.log('REQUEST', request)
+        setRequest(encodeURIComponent(`title=${reqTitle.toLowerCase()}&genres=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`))
+        // console.log('REQUEST', request)
         // setSendRequest(true)
         // const encodedRequest = encodeURIComponent(request)
         // console.log('Getting comments...')
@@ -111,7 +129,7 @@ export default function SearchForm({ setMovies, setComments, setLoading }) {
                         Show request build
                     </button>
                     {showReq ? (
-                        <div className="result" style={{ fontSize: '12px', fontWeight: 'bold', color: 'red', textAlign: 'center', padding: '10px 0' }}>- REQUEST - {request}</div>
+                        <div className="result" style={{ fontSize: '12px', fontWeight: 'bold', color: 'red', textAlign: 'center', padding: '10px 0' }}>- REQUEST - {requestBuild}</div>
                     ) : (
                         <div></div>
                     )}

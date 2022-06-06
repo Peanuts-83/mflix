@@ -5,7 +5,7 @@ export default async function (req, res) {
     const { value } = req.query
     const { db } = await connectToDatabase()
 
-    let typeOfRequest, movies, id, title, genre, director, rating
+    let typeOfRequest, movies, id, title, genres, directors, rating
 
     console.log('QUERY', value);
     if (value === null) return
@@ -19,12 +19,12 @@ export default async function (req, res) {
         default:
             typeOfRequest = 'FORM_REQ'
             console.log('CASE FORM');
-            [title, genre, director, rating] = value.split('&')
+            [title, genres, directors, rating] = value.split('&')
             title = title.split('=')[1]
-            genre = genre.split('=')[1]
-            director = director.split('=')[1]
+            genres = genres.split('=')[1]
+            directors = directors.split('=')[1]
             rating = rating.split('=')[1].split(',')
-            console.log(`SEARCH values - ${title}, ${genre}, ${director}, ${rating}`)
+            console.log(`SEARCH values - ${title}, ${genres}, ${directors}, ${rating}`)
     }
 
 
@@ -45,7 +45,7 @@ export default async function (req, res) {
 
         case 'FORM_REQ':
             const request = {}
-            const requestValues = { title, genre, director }
+            const requestValues = { title, genres, directors }
             for (let key of Object.keys(requestValues)) {
                 if (key && requestValues[key] !== '') {
                     request[key] = new RegExp(requestValues[key], 'i')
@@ -53,23 +53,26 @@ export default async function (req, res) {
             }
 
             request["imdb.rating"] = { '$gte': Math.min(...rating), '$lte': Math.max(...rating) }
-
+            console.log('REQUEST', request);
             // GET matching movies _id
             movies = await db
                 .collection('movies')
                 .find(request)
+                // .filter({ 'imdb.rating': { $ne: '' } })
                 .project({
                     _id: "$_id",                // Object_id
                     title: "$title",            // ''
                     poster: "$poster",          // 'url'
                     genres: "$genres",            // []
                     directors: "$directors",      // []
-                    rating: "$imdb.rating",      // []
+                    'imdb.rating': "$imdb.rating",      // nber
                     year: "$year"
                 })
+                // .sort({ 'year': -1 })
                 // .limit(500)
                 .toArray()
-            console.log('MOVIES found -', movies.map(e => e.year).filter(e => String(e).includes('è')))
+            // console.log('MOVIES found -', movies[0])
+        // console.log('MOVIES wrong date -', movies.map(e => e.year).filter(e => String(e).includes('è')))
     }
 
     res.json(movies)

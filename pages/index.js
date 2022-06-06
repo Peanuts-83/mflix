@@ -2,26 +2,37 @@ import { useState, useEffect } from 'react'
 import { useRequest } from 'util/useRequest'
 
 export default function Home({ props }) {
-    let { movies } = props
-    const [pageComments, setPageComments] = useState()
+
+    // Ordered movies list
+    const [moviesOL, setMoviesOL] = useState([])
 
     // NUMBER of movies & comments to display
-    const [moviesPerPage, setMovisePerPage] = useState(30)
+    const [moviesPerPage, setMovisePerPage] = useState(10)
     const [page, setPage] = useState(1)
-    const [moviesID, setMoviesID] = useState([])
+    const [moviesIDList, setMoviesIDList] = useState([])
 
-    // MIN & MAX Index to display
-    const [movieIDMin, setMovieIdMin] = useState(moviesPerPage * (page - 1))
-    const [movieIDMax, setMovieIdMax] = useState((moviesPerPage * (page - 1)) + moviesPerPage)
+    // MIN & MAX Index to display  // use setter if range/length change
+    const [movieIndexMin, setMovieIndexMin] = useState(moviesPerPage * (page - 1))
+    const [movieIndexMax, setMovieIndexMax] = useState((moviesPerPage * (page - 1)) + moviesPerPage)
 
-    // COMMENTS fetch
-    const { data: comments, error: commentsErr, isLoading: loading } = useRequest(`/api/comments/${moviesID}`)
+    // Originals movies & comments lists
+    const { movies } = props
+    const { data: comments, error: commentsErr, isLoading: loading } = useRequest(`/api/comments/${moviesIDList}`)
 
-    // BUILD moviesID // sorted by date
+    // FEED list
     useEffect(() => {
-        console.log('PROPS -', props)
-        if (movies) {
-            movies = movies.sort((a, b) => {
+        setMoviesOL(movies)
+    }, [movies])
+
+    // BUILD ordered list
+    useEffect(() => {
+        if (moviesOL) {
+            setMoviesIDList(moviesOL.filter((e, i) => i >= movieIndexMin && i < movieIndexMax).map(e => e['_id']))
+        }
+    }, [moviesOL])
+
+    function sortByDate(list = moviesOL) {
+            const res = list.sort((a, b) => {
                 const dateA = a.year.length > 4 ? a.year.split('è')[0] : a.year
                 const dateB = b.year.length > 4 ? b.year.split('è')[0] : b.year
                 if (dateA > dateB) {
@@ -32,54 +43,83 @@ export default function Home({ props }) {
                     return 0
                 }
             })
-            setMoviesID(movies.filter((e, i) => i >= movieIDMin && i < movieIDMax).map(e => e['_id']))
+            // console.log('MOVIES from sort by date', res[0])
+            setMoviesOL(res)
+            renderMovies(res)
         }
-    }, [props])
 
-    useEffect(() => {
-        console.log('COMMENTS', comments);
-    })
+    function sortByRating(list = moviesOL) {
+            const res = list.sort((a, b) => {
+                if (a.imdb.rating > b.imdb.rating) {
+                    return -1
+                } else if (a.imdb.rating < b.imdb.rating) {
+                    return 1
+                } else {
+                    return 0
+                }
+            })
+            // console.log('MOVIES from sort by rating', res[0])
+            setMoviesOL(res)
+            renderMovies(res)
+    }
+
+    function renderMovies(list = moviesOL) {
+        setMoviesIDList(list.filter((e, i) => i >= movieIndexMin && i < movieIndexMax).map(e => e['_id']))
+    }
+
 
     return (
         <div className="container">
-            test <br />
+            <div>
+                Sort by :
+                <div onClick={() => sortByDate()}> Date </div>
+
+                <div onClick={() => sortByRating()}> Rating </div>
+            </div>
 
             <ul>
-                {movies?.map((movie, i) => {
-                    if (i >= movieIDMin && i < movieIDMax) {
+                {moviesOL?.map((movie, i) => {
+                    if (i >= movieIndexMin && i < movieIndexMax) {
                         return (
                             <li key={i}>
                                 <div>
                                     {i + 1} - {movie.title} / {movie.year}
                                 </div>
-                                <ul>
-                                    {comments[movie._id]?.map((comment, j) => (
-                                        <li key={`${i}-${j}`}>
-                                            {comment.text}
-                                        </li>
+                                <div>
+                                    Average rating : {movie.imdb.rating} - Director(s) : {movie.directors?.map((d, k) => (
+                                        <span key={k}>{d}</span>
                                     ))}
+                                </div>
+                                <div>
+                                    GENRE :
+                                    {movie.genres.map((g, k) => (
+                                        <span key={k}> {g} {k < movie.genres.length - 1 && '/'} </span>
+                                    ))}
+                                </div>
+                                <ul>
+                                    {comments ?
+                                        comments[movie._id] && comments[movie._id].length > 0 ?
+                                            comments[movie._id]?.map((comment, k) => (
+                                                <li key={k}>
+                                                    {comment.text} -
+                                                    <a
+                                                        href="#"
+                                                        title={`See all comments of this user`}>
+                                                        <em> {comment.name} </em>
+                                                    </a>
+                                                </li>
+                                            ))
+                                            : (
+                                                <li>NO COMMENTS</li>
+                                            ) : (
+                                            <li>NO COMMENT</li>
+                                        )}
                                 </ul>
                             </li>
                         )
                     }
-
-                    // // Display movie if at least one comment
-                    // return comments[i]?.length > 0 && (
-                    //   <li key={i}>
-                    //     <div>
-                    //       {movie.title} + {movie.rating}
-                    //     </div>
-                    //     <ul>
-                    //       {comments[i]?.map((comment, j) => (
-                    //         <li key={`${i}-${j}`}>
-                    //           {comment.text}
-                    //         </li>
-                    //       ))}
-                    //     </ul>
-                    //   </li>
-                    // )
                 })}
             </ul>
-        </div>
+        </div >
     )
 }
