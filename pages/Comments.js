@@ -8,7 +8,7 @@ import style from 'styles/results.module.scss'
 
 export default function Comments({ comments, movies }) {
     const results = useRef(null)
-    const moviesList = movies.map(movie => movie.title)
+    const moviesList = movies?.map(movie => movie.title)
     const [selected, setSelected] = useState('')
     const [data, setData] = useState([])
     const [movieId, setMovieId] = useState([])
@@ -36,10 +36,10 @@ export default function Comments({ comments, movies }) {
 
         allMovieComments.forEach(elt => elt.innerHTML = '')
 
-        const HTML = comments.filter(comment => comment.movie_id === movie_id)
+        const HTML = comments?.filter(comment => comment.movie_id === movie_id)
         console.log('HTML -', HTML);
         // setUserComment(HTML)
-        target.innerHTML = HTML.map((comment, i) => (
+        target.innerHTML = HTML?.map((comment, i) => (
             `<li key=${i}>
                 <h4>${comment.name}</h4>
                 <small>${comment.date}</small>
