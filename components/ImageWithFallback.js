@@ -16,13 +16,13 @@ export default function ImageWithFallback({ src, fallback, ...rest }) {
     }, [src])
 
     return (
-        <div>
+        <>
             <Image
                 {...rest}
                 src={imgSrc}
                 placeholder={fallback}
                 onError={handleError}
             />
-        </div>
+        </>
     )
 }

@@ -4,6 +4,7 @@ import style from 'styles/index.module.scss'
 import default_movie from 'assets/default_movie.png'
 import Image from 'next/image'
 import ImageWithFallback from 'components/ImageWithFallback'
+import Comments from 'components/Comments'
 
 export default function Home({ props }) {
 
@@ -11,7 +12,7 @@ export default function Home({ props }) {
     const [moviesOL, setMoviesOL] = useState([])
 
     // NUMBER of movies & comments to display
-    const [moviesPerPage, setMovisePerPage] = useState(10)
+    const [moviesPerPage, setMovisePerPage] = useState(20)
     const [page, setPage] = useState(1)
     const [moviesIDList, setMoviesIDList] = useState([])
 
@@ -31,7 +32,7 @@ export default function Home({ props }) {
         sortByDate(movies)
     }, [movies])
 
-    // BUILD ordered list
+    // BUILD ordered list visible section
     useEffect(() => {
         if (moviesOL) {
             setMoviesIDList(moviesOL.filter((e, i) => i >= movieIndexMin && i < movieIndexMax).map(e => e['_id']))
@@ -71,7 +72,7 @@ export default function Home({ props }) {
         setSorter('rating')
         renderMovies(res)
     }
-    
+
     function sortByTitle(list = moviesOL) {
         const res = list.sort((a,b) => {
             if (a.title.toLowerCase() > b.title.toLowerCase()) {
@@ -134,7 +135,8 @@ export default function Home({ props }) {
                                         )}
                                     </div>
                                     <div className={style.title}>
-                                        <h1>{movie.title}</h1>
+
+                                        <h1>#{i+1} <br />{movie.title}</h1>
                                         <h2>{movie.year}</h2>
                                         <div className={style.avgAndDirectors}>
                                             <div className={style.avg}>
@@ -153,32 +155,14 @@ export default function Home({ props }) {
                                             </div>
                                         </div>
                                         <div className={style.genres}>
-                                            {movie.genres.map((g, k) => (
+                                            {movie.genres?.map((g, k) => (
                                                 <span key={k}> {g} {k < movie.genres.length - 1 && '/'} </span>
                                             ))}
                                         </div>
                                     </div>
                                 </div>
                                 <ul className={style.ulComment}>
-                                    {comments ?
-                                        comments[movie._id] && comments[movie._id].length > 0 ?
-                                            comments[movie._id]?.map((comment, k) => (
-                                                <li className={style.liComment} key={k}>
-                                                    <strong
-                                                        className={style.userName}
-                                                        title={`See all comments from ${comment.name}`}> {comment.name}
-                                                    </strong>
-                                                    <br />
-                                                    <cite className={style.cite}>
-                                                        {comment.text}
-                                                    </cite>
-                                                </li>
-                                            ))
-                                            : (
-                                                <li className={style.liComment}>NO COMMENTS</li>
-                                            ) : (
-                                            <li className={style.liComment}>NO COMMENT</li>
-                                        )}
+                                    {movie && comments && <Comments comments={comments} movie={movie} />}
                                 </ul>
                             </li>
                         )

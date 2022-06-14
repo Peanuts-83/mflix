@@ -58,7 +58,7 @@ export default async function (req, res) {
             movies = await db
                 .collection('movies')
                 .find(request)
-                // .filter({ 'imdb.rating': { $ne: '' } })
+                .filter({ 'imdb.rating': { $ne: '' } })
                 .project({
                     _id: "$_id",                // Object_id
                     title: "$title",            // ''
