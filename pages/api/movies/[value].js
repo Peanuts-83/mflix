@@ -58,7 +58,7 @@ export default async function (req, res) {
             movies = await db
                 .collection('movies')
                 .find(request)
-                .filter({ 'imdb.rating': { $ne: '' } })
+                // .filter({ 'imdb.rating': { $ne: '' } })
                 .project({
                     _id: "$_id",                // Object_id
                     title: "$title",            // ''
@@ -71,7 +71,7 @@ export default async function (req, res) {
                 // .sort({ 'year': -1 })
                 // .limit(500)
                 .toArray()
-            // console.log('MOVIES found -', movies[0])
+            console.log('MOVIES found -', movies.length)
         // console.log('MOVIES wrong date -', movies.map(e => e.year).filter(e => String(e).includes('è')))
     }
 

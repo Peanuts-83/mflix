@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useRequest } from 'util/useRequest'
 import style from 'styles/index.module.scss'
 import default_movie from 'assets/default_movie.png'
@@ -29,13 +29,27 @@ export default function Home({ props }) {
 
     // FEED list
     useEffect(() => {
-        sortByDate(movies)
+        if (movies && movies.length > 0) {
+            console.log('MOVIES from index', movies);
+            const simpleMovies = movies
+            // CLEANUP DATES
+            .map(e => {
+                console.log(e.year, typeof e.year)
+                typeof e.year === 'string' ? e.year = e.year.split('è')[0] : null
+                return e
+            })
+        sortByDate(simpleMovies)
+        } else {
+            sortByDate([])
+        }
     }, [movies])
 
     // BUILD ordered list visible section
     useEffect(() => {
         if (moviesOL) {
-            setMoviesIDList(moviesOL.filter((e, i) => i >= movieIndexMin && i < movieIndexMax).map(e => e['_id']))
+            setMoviesIDList(moviesOL
+                .filter((e, i) => i >= movieIndexMin && i < movieIndexMax)
+                .map(e => e['_id']))
         }
     }, [moviesOL])
 
@@ -74,7 +88,7 @@ export default function Home({ props }) {
     }
 
     function sortByTitle(list = moviesOL) {
-        const res = list.sort((a,b) => {
+        const res = list.sort((a, b) => {
             if (a.title.toLowerCase() > b.title.toLowerCase()) {
                 return 1
             } else if (a.title.toLowerCase() < b.title.toLowerCase()) {
@@ -109,6 +123,7 @@ export default function Home({ props }) {
             </div>
 
             <ul className={style.ulMain}>
+                {moviesOL?.length === 0 && <div>No match on your query!</div> }
                 {moviesOL?.map((movie, i) => {
                     if (i >= movieIndexMin && i < movieIndexMax) {
                         return (
@@ -136,7 +151,7 @@ export default function Home({ props }) {
                                     </div>
                                     <div className={style.title}>
 
-                                        <h1>#{i+1} <br />{movie.title}</h1>
+                                        <h1>#{i + 1} <br />{movie.title}</h1>
                                         <h2>{movie.year}</h2>
                                         <div className={style.avgAndDirectors}>
                                             <div className={style.avg}>
@@ -147,11 +162,11 @@ export default function Home({ props }) {
                                                     Director(s)
                                                 </div>
                                                 {movie.directors && movie.directors.length > 0 ?
-                                                (movie.directors?.map((d, k) => (
-                                                    <div key={k}><strong>{d}</strong></div>
-                                                ))):(
-                                                    <div><em>not provided</em></div>
-                                                )}
+                                                    (movie.directors?.map((d, k) => (
+                                                        <div key={k}><strong>{d}</strong></div>
+                                                    ))) : (
+                                                        <div><em>not provided</em></div>
+                                                    )}
                                             </div>
                                         </div>
                                         <div className={style.genres}>

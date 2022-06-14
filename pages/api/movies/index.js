@@ -5,12 +5,49 @@ export default async function (req, res) {
 
     const movies = await db
         .collection("movies")
-        .find({})
-        .filter({ 'imdb.rating': { $ne: '' } })
-        .sort({ 'imdb.rating': -1, 'year': -1 })
-        .limit(20)
+        .aggregate([
+            {
+                '$match': {
+                    'imdb.rating': {
+                        '$ne': ''
+                    }
+                }
+            }, {
+                '$sort': {
+                    'imdb.rating': -1
+                }
+            }, {
+                '$limit': 50
+            }, {
+                '$group': {
+                    '_id': '$title',
+                    'data': {
+                        '$first': '$$ROOT'
+                    }
+                }
+            }, {
+                '$sort': {
+                    'data.imdb.rating': -1
+                }
+            }, {
+                '$limit': 20
+            }
+        ])
         .toArray()
 
-    // console.log('RATING', movies[0])
-    res.json(movies)
+    // INITIAL REQUEST not parsing doubles in $title //
+    // const movies = await db
+    //     .collection("movies")
+    //     .find({})
+    //     .filter(
+    //         { 'imdb.rating': { $ne: '' } },
+    //         { 'title': { $nin: '$$ROOT' } }
+    //     )
+    //     .sort({ 'imdb.rating': -1, 'year': -1 })
+    //     .limit(20)
+    //     .toArray()
+
+
+    console.log('RATING', movies)
+    res.json(movies.map(e => e.data))
 }

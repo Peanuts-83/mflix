@@ -15,14 +15,12 @@ export default function SearchForm({ setMovies, setComments, setLoading }) {
     const [requestBuild, setRequestBuild] = useState('')
     const [showReq, setShowReq] = useState(false)
 
-
-    // const [sendRequest, setSendRequest] = useState(false)
+    // GET Movies - by default route /api/movies/index.js >> 20 best rated movies ever!
     const { data: movies, error: moviesErr, isLoading: moviesLoad } = useRequest(`/api/movies/${request}`)
 
     useEffect(() => {
         switch (moviesLoad) {
             case true:
-                // console.log('LOADING')
                 setLoading(true)
                 break
             default:
@@ -36,23 +34,13 @@ export default function SearchForm({ setMovies, setComments, setLoading }) {
     const [reqDirector, setReqDirector] = useState('')
     const [reqRating, setReqRating] = useState([])
 
-    // const [ratingRange, setRatingRange] = useState([])
-
-    // RESPONSE values
-    // const [movieIds, setMovieIds] = useState([])
-    // const [directors, setDirectors] = useState([])
-    // const [ratings, setRatings] = useState([])
-
-
-    // useEffect(() => console.log('GENRES from search', genres, genresErr), [genres])
-
     useEffect(() => {
-        // console.table('MOVIES from search', movies, moviesErr)
+        console.table('MOVIES from search', movies, moviesErr)
         setMovies(movies)
     }, [movies])
 
 
-    // BUILD REQUEST
+    // BUILD REQUEST DEMO
     useEffect(() => {
         const ratingRange = []
         for (let i = reqRating[0]; i <= reqRating[1]; i++) {
@@ -60,19 +48,6 @@ export default function SearchForm({ setMovies, setComments, setLoading }) {
         }
         setRequestBuild(`title=${reqTitle.toLowerCase()}&genres=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`)
     }, [reqTitle, reqDirector, reqGenre, reqRating])
-
-    // useEffect(() => {
-    //     buildRatingRange()
-    // }, [reqRating])
-
-    // function buildRatingRange() {
-    //     if (reqRating) {
-    //         console.log('REQRATING', reqRating)
-    //         for (let i = reqRating[0]; i <= reqRating[1]; i++) {
-    //                 ratingRange.push(i)
-    //             }
-    //     }
-    // }
 
 
     // GET comments
@@ -83,25 +58,6 @@ export default function SearchForm({ setMovies, setComments, setLoading }) {
             ratingRange.push(i)
         }
         setRequest(encodeURIComponent(`title=${reqTitle.toLowerCase()}&genres=${reqGenre}&director=${reqDirector.toLowerCase()}&rating=${ratingRange}`))
-        // console.log('REQUEST', request)
-        // setSendRequest(true)
-        // const encodedRequest = encodeURIComponent(request)
-        // console.log('Getting comments...')
-        // const response = await axios.get(`/api/comments/${request}`)
-        // const data = await response.data
-        // setComments(data.comments)
-        // setMovies(data.movies)
-
-        // const ids = []
-        // data
-        //     .map(e => e.movie_id)
-        //     .forEach(e => {
-        //         if (!ids.includes(e)) {
-        //             ids.push(e)
-        //         }
-        //     })
-        // setMovieIds(ids)
-        // console.log('COMMENTS -', ids)
     }
 
     return (
@@ -113,7 +69,9 @@ export default function SearchForm({ setMovies, setComments, setLoading }) {
                     <label htmlFor="genre">Genre</label>
                     <select id='genre' onChange={e => setReqGenre(e.target.value)}>
                         <option value="">Choose a genre</option>
-                        {genres?.map((genre, i) => (
+                        {genresErr ? (
+                            <option value="">Error loading genres</option>
+                        ) : genres?.map((genre, i) => (
                             <option value={genre.toLowerCase()} key={i}>{genre}</option>
                         ))}
                     </select>

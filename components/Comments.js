@@ -14,7 +14,12 @@ export default function Comments({ comments, movie }) {
             {comments &&
                 comments[movie._id] && comments[movie._id].length > 0 ?
                 (
-                    <div className={style.seeComments} onClick={toggleComments}>{comments[movie._id].length} comment(s) available</div>
+                    <div
+                        className={style.seeComments}
+                        onClick={toggleComments}
+                        title='See comments'
+                    >
+                        {comments[movie._id].length} comment(s) available</div>
                 ) : (
                     <div className={style.noComments}>No comments on this movie</div>
                 )}
