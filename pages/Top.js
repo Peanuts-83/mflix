@@ -8,7 +8,7 @@ export default function Top({ movies }) {
                 <small>(According to Metacritic)</small>
             </p>
             <ul>
-                {movies.map((movie) => (
+                {movies?.map((movie) => (
                     <li>
                         <h2>{movie.title}</h2>
                         <h3>{movie.metacritic}</h3>

@@ -12,7 +12,7 @@ export default function Movies({ movies }) {
                 <small>(according to metacritics)</small>
             </p>
             <ul className={style.movies}>
-                {movies.map((movie, i) => (
+                {movies?.map((movie, i) => (
                     <li className={style.movie} key={i}>
                         {movie.poster ? (
                             <ImageWithFallback

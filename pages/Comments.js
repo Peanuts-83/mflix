@@ -53,7 +53,7 @@ export default function Comments({ comments, movies }) {
             <div>
                 <select name="movies" id="movies" onChange={e => setSelected(e.target.value)} value={selected}>
                     <option value="">Select a movie</option>
-                    {moviesList.map((name, i) => (
+                    {moviesList?.map((name, i) => (
                         <option value={name} key={i}>{name}</option>
                     ))}
                 </select>
@@ -66,7 +66,7 @@ export default function Comments({ comments, movies }) {
                         {console.log('MyData -', data)}
                         <div>Number of critics: {data.length}</div>
                         <ul>
-                            {data.map((comment, i) => (
+                            {data?.map((comment, i) => (
                                 <li key={i}>
                                     <h3><a href={`mailto:${comment.email}`}>{comment.name}</a></h3>
                                     <small>{comment.date}</small>
@@ -81,7 +81,7 @@ export default function Comments({ comments, movies }) {
             <h1>20 Most recent comments</h1>
             <small>(on Metacritics)</small>
             <ul>
-                {comments.map((comment, i) => (
+                {comments?.map((comment, i) => (
                     <li key={i}>
                         <h2>{comment.name} - {movies.filter(movie => movie._id === comment.movie_id)[0].title}</h2>
                         <small>{comment.date}</small>
