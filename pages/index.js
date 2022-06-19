@@ -15,6 +15,7 @@ export default function Home({ props }) {
     const [moviesPerPage, setMoviesPerPage] = useState(20)
     const [pagesNumber, setPagesNumber] = useState()
     const [page, setPage] = useState(1)
+    const [pageArray, setPageArray] = useState([])
     const [moviesIDList, setMoviesIDList] = useState([])
 
     // MIN & MAX Index to display  // use setter if range/length change
@@ -35,7 +36,7 @@ export default function Home({ props }) {
             const simpleMovies = movies
                 // CLEANUP DATES
                 .map(e => {
-                    console.log(e.year, typeof e.year)
+                    // console.log(e.year, typeof e.year)
                     typeof e.year === 'string' ? e.year = e.year.split('è')[0] : null
                     return e
                 })
@@ -55,7 +56,18 @@ export default function Home({ props }) {
         }
         setMovieIndexMin(moviesPerPage * (page - 1))
         setMovieIndexMax((moviesPerPage * (page - 1)) + moviesPerPage)
-    }, [moviesOL, moviesPerPage])
+    }, [moviesOL, moviesPerPage, page])
+
+    useEffect(() => {
+        if (pagesNumber) {
+            console.log('Page Array', pagesNumber, Array.from(Array(pagesNumber).keys()).map(x => ++x));
+            setPageArray(Array.from(Array(pagesNumber).keys())
+                .map(x => ++x)
+                .filter(x => x >= page - 2 && x <= page + 2 && x <= pagesNumber)
+            )
+
+        }
+    }, [pagesNumber, page])
 
     function sortByDate(list = moviesOL) {
         const res = list.sort((a, b) => {
@@ -110,36 +122,48 @@ export default function Home({ props }) {
         setMoviesIDList(list.filter((e, i) => i >= movieIndexMin && i < movieIndexMax).map(e => e['_id']))
     }
 
+    function changePageArray(way) {
+        way === 'previous' ?
+            setPage(page - 1)
+            :
+            setPage(page + 1)
+    }
+
     return (
         <div className="container">
             <div className={style.submenu}>
-                {moviesOL?.length === 0 ? <div>No match on your query!</div> : <div>{moviesOL.length} matchs!</div>}
+                {moviesOL?.length === 0 ? <div>No match on your query!</div> : <div>{moviesOL.length} matchs for {pagesNumber} page(s)</div>}
                 <div className={style.sort}>
                     <div className={style.sortBy}>
                         <div className={style.sortByTitle}>
                             Sort by
                         </div>
-                        <div className={`${style.sortLink} ${sorter === 'date' ? style.selected : ''}`} onClick={() => sortByDate()} > Date </div>
+                        <div className={`${style.sortLink} ${sorter === 'date' ? style.selected : ''}`} onClick={() => sortByDate()} title='sortByDate'> Date </div>
 
-                        <div className={`${style.sortLink} ${sorter === 'rating' ? style.selected : ''}`} onClick={() => sortByRating()} > Rating </div>
+                        <div className={`${style.sortLink} ${sorter === 'rating' ? style.selected : ''}`} onClick={() => sortByRating()} title='sortByRating' > Rating </div>
 
-                        <div className={`${style.sortLink} ${sorter === 'title' ? style.selected : ''}`} onClick={() => sortByTitle()} > Title </div>
+                        <div className={`${style.sortLink} ${sorter === 'title' ? style.selected : ''}`} onClick={() => sortByTitle()} title='sortByTitle' > Title </div>
                         <div className={style.sortByTitle}></div>
                     </div>
                     <select className={style.selectResNum} name="resultsPerPage" id="resultsNumber" onChange={e => setMoviesPerPage(+e.target.value)}>
-                        <option value="20">20 résultats par page</option>
-                        <option value="50">50 résultats par page</option>
-                        <option value="100">100 résultats par page</option>
+                        <option value="20">20 results per page</option>
+                        <option value="50">50 results per page</option>
+                        <option value="100">100 results per page</option>
                     </select>
                 </div>
-                <div className={style.num}>page {page} {
-                    page < pagesNumber ? (
-                        <span>suivant</span>
+                <div className={style.num}>
+                    {page !== 1 && <span className={`${style.next} ${style.active}`} onClick={() => changePageArray('previous')} title='next'>Previous...</span>}
+                    {pageArray.map((x, i) => {
+                        return x === page ?
+                            x === pagesNumber ?
+                                <span key={i}> {x} </span>
+                                :
+                                <span key={i}> {x} <span>/</span></span>
+                            :
+                            <span key={i} className={`${style.next} ${style.active}`} onClick={() => setPage(x)}> {x} <span>/</span></span>
+                    })}
+                    {page < pagesNumber && <span className={`${style.next} ${style.active}`} onClick={() => changePageArray('next')} title='next'>...next</span>}
 
-                    ) : (
-                        <span>page {pagesNumber}</span>
-                    )
-                } sur {pagesNumber}
                 </div>
             </div>
 

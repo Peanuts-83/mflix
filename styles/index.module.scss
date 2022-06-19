@@ -1,5 +1,8 @@
 @import "./library";
 
+.active {
+    color: $link;
+}
 // index.js //
 .submenu {
     display: flex;
@@ -52,6 +55,10 @@
     }
     .num {
         padding-top: 10px;
+
+        .next {
+            cursor: pointer;
+        }
     }
 }
 
