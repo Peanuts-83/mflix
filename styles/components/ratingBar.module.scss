@@ -1,6 +1,7 @@
+@import "../library";
+
 .container {
     position: relative;
-    /* width: 200px; */
     height: 35px;
     text-align: center;
 }
@@ -20,26 +21,31 @@
     pointer-events: none;
     z-index: 15;
     position: absolute;
+    // text-align: center;
     top: 11px;
     padding: 0 11px;
-    font-size: 16px;
+    font-size: 12px;
 }
+
+
 
 #start, #end {
     z-index: 10;
     cursor: pointer;
 }
 
-/* #start::-webkit-slider-runnable-track, #end::-webkit-slider-runnable-track, #start::-ms-track, #end::-ms-track,*/
-#start::-moz-range-track {
+
+// Moz - Firefox settings
+#start::-moz-range-track
+{
     z-index: -1;
     background-color: transparent;
     padding: 2px 0;
     border-radius: 3px;
-    border: 2px solid black;
 }
 
-#start::-moz-range-thumb, #end::-moz-range-thumb {
+#start::-moz-range-thumb, #end::-moz-range-thumb
+{
     pointer-events: all;
     z-index: 10;
     padding: 7px;
@@ -49,14 +55,33 @@
     transition: all .3s;
 }
 
-#start::-moz-range-thumb:hover, #end::-moz-range-thumb:hover,
-#start::-moz-range-thumb:active, #end::-moz-range-thumb:active {
-    background-color: #ffc700;
+
+// Webkit - chrome settings
+#start[type=range], #end[type=range] {
+    -webkit-appearance: none;
+    background-color: transparent;
 }
 
-#start::-moz-range-thumb::before, #start::-webkit-slider-thumb::before {
-    content: '1';
+#start[type=range]::-webkit-slider-runnable-track
+{
+    z-index: -1;
+    padding: 2px 0;
 }
+
+#start[type=range]::-webkit-slider-thumb, #end[type=range]::-webkit-slider-thumb
+{
+    -webkit-appearance: none;
+    width: 10px;
+    background: white;
+    pointer-events: all;
+    z-index: 10;
+    padding: 7px;
+    border-radius: 50%;
+    border: 3px solid black;
+    transition: all .3s;
+    padding: 12px;
+}
+
 
 .gap {
     z-index: 1;
@@ -64,11 +89,12 @@
     top: 17px;
     left: 0;
     height: 6px;
-    background-color: #ffc700;
+    background-color: $yellow;
+    border: 1px solid black;
 }
 
 @media screen and (max-width: 768px) {
-    /* .outputStart, .outputEnd {
-        font-size: 12px;
-    } */
+    //  .outputStart, .outputEnd {
+    //     font-size: 12px;
+    // }
 }

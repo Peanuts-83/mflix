@@ -1,3 +1,5 @@
+@import "./library";
+
 html,
 body {
 	padding: 0;
@@ -21,7 +23,7 @@ main {
 }
 
 header {
-	background-color: #ffc700;
+	background-color: $yellow;
 	display: flex;
 	flex-direction: column;
 	border-bottom: 3px solid black;
@@ -66,7 +68,7 @@ a:hover {
 }
 
 .logo {
-	background: url("../assets/back_up.png") #ffc700 no-repeat;
+	background: url("../assets/back_up.png") $yellow no-repeat;
 	background-size: 700px;
 	max-width: 800px;
 	width: 100%;
@@ -122,7 +124,7 @@ footer {
 	display: flex;
 	padding: 30px;
 	justify-content: center;
-	background-color: #ffc700;
+	background-color: $yellow;
 }
 
 @media screen and (max-width: 768px) {
