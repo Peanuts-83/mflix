@@ -47,7 +47,5 @@ export default async function (req, res) {
     //     .limit(20)
     //     .toArray()
 
-
-    // console.log('RATING', movies)
     res.json(movies.map(e => e.data))
 }

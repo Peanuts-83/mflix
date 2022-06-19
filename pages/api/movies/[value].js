@@ -34,16 +34,21 @@ export default async function (req, res) {
             const obj_id = new ObjectId(id)
             movies = await db
                 .collection('movies')
-                .find({ _id: obj_id })
-                .project({
-                    _id: "$_id",
-                    title: "$title",
-                    poster: "$poster",          // 'url'
-                    genres: "$genres",            // []
-                    directors: "$directors",      // []
-                    'imdb.rating': "$imdb.rating",      // nber
-                    year: "$year"
-                })
+                .aggregate([
+                    {$match: {
+                        _id: obj_id
+                    }},
+                    {$sort: {
+                        year: -1,
+                        'imdb.rating': -1
+                    }},
+                    {$group: {
+                        _id: '$title',
+                        data: {
+                            '$first': '$$ROOT'
+                        }
+                    }}
+                ])
                 .toArray()
             break
 
@@ -76,7 +81,6 @@ export default async function (req, res) {
                 ])
                 .toArray()
             console.log('MOVIES found -', movies.length)
-        // console.log('MOVIES wrong date -', movies.map(e => e.year).filter(e => String(e).includes('è')))
     }
 
     res.json(movies.map(e => e.data))
