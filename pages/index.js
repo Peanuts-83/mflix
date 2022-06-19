@@ -28,6 +28,7 @@ export default function Home({ props }) {
 
     // SORT status
     const [sorter, setSorter] = useState()
+    const [sortAsc, setSortAsc] = useState(true)
 
     // FEED list
     useEffect(() => {
@@ -74,14 +75,14 @@ export default function Home({ props }) {
             const dateA = a.year.length > 4 ? a.year.split('è')[0] : a.year
             const dateB = b.year.length > 4 ? b.year.split('è')[0] : b.year
             if (dateA > dateB) {
-                return -1
+                return sortAsc ? 1 : -1
             } else if (dateA < dateB) {
-                return 1
+                return sortAsc ? -1 : 1
             } else {
                 return 0
             }
         })
-        // console.log('MOVIES from sort by date', res[0])
+        setSortAsc(!sortAsc)
         setMoviesOL(res)
         setSorter('date')
         renderMovies(res)
@@ -90,14 +91,14 @@ export default function Home({ props }) {
     function sortByRating(list = moviesOL) {
         const res = list.sort((a, b) => {
             if (a.imdb.rating > b.imdb.rating) {
-                return -1
+                return sortAsc ? 1 : -1
             } else if (a.imdb.rating < b.imdb.rating) {
-                return 1
+                return sortAsc ? -1 : 1
             } else {
                 return 0
             }
         })
-        // console.log('MOVIES from sort by rating', res[0])
+        setSortAsc(!sortAsc)
         setMoviesOL(res)
         setSorter('rating')
         renderMovies(res)
@@ -106,13 +107,14 @@ export default function Home({ props }) {
     function sortByTitle(list = moviesOL) {
         const res = list.sort((a, b) => {
             if (a.title.toLowerCase() > b.title.toLowerCase()) {
-                return 1
+                return sortAsc ? 1 : -1
             } else if (a.title.toLowerCase() < b.title.toLowerCase()) {
-                return -1
+                return sortAsc ? -1 : 1
             } else {
                 return 0
             }
         })
+        setSortAsc(!sortAsc)
         setMoviesOL(res)
         setSorter('title')
         renderMovies(res)
