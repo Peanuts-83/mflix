@@ -20,7 +20,8 @@ export default function ImageWithFallback({ src, fallback, ...rest }) {
             <Image
                 {...rest}
                 src={imgSrc}
-                placeholder={fallback}
+                placeholder='blur'
+                blurDataURL={imgSrc}
                 onError={handleError}
             />
         </>
