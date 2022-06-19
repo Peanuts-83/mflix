@@ -48,6 +48,6 @@ export default async function (req, res) {
     //     .toArray()
 
 
-    console.log('RATING', movies)
+    // console.log('RATING', movies)
     res.json(movies.map(e => e.data))
 }

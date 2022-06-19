@@ -12,7 +12,8 @@ export default function Home({ props }) {
     const [moviesOL, setMoviesOL] = useState([])
 
     // NUMBER of movies & comments to display
-    const [moviesPerPage, setMovisePerPage] = useState(20)
+    const [moviesPerPage, setMoviesPerPage] = useState(20)
+    const [pagesNumber, setPagesNumber] = useState()
     const [page, setPage] = useState(1)
     const [moviesIDList, setMoviesIDList] = useState([])
 
@@ -32,13 +33,13 @@ export default function Home({ props }) {
         if (movies && movies.length > 0) {
             console.log('MOVIES from index', movies);
             const simpleMovies = movies
-            // CLEANUP DATES
-            .map(e => {
-                console.log(e.year, typeof e.year)
-                typeof e.year === 'string' ? e.year = e.year.split('è')[0] : null
-                return e
-            })
-        sortByDate(simpleMovies)
+                // CLEANUP DATES
+                .map(e => {
+                    console.log(e.year, typeof e.year)
+                    typeof e.year === 'string' ? e.year = e.year.split('è')[0] : null
+                    return e
+                })
+            sortByDate(simpleMovies)
         } else {
             sortByDate([])
         }
@@ -50,8 +51,11 @@ export default function Home({ props }) {
             setMoviesIDList(moviesOL
                 .filter((e, i) => i >= movieIndexMin && i < movieIndexMax)
                 .map(e => e['_id']))
+            setPagesNumber(Math.ceil(moviesOL.length / moviesPerPage))
         }
-    }, [moviesOL])
+        setMovieIndexMin(moviesPerPage * (page - 1))
+        setMovieIndexMax((moviesPerPage * (page - 1)) + moviesPerPage)
+    }, [moviesOL, moviesPerPage])
 
     function sortByDate(list = moviesOL) {
         const res = list.sort((a, b) => {
@@ -106,24 +110,40 @@ export default function Home({ props }) {
         setMoviesIDList(list.filter((e, i) => i >= movieIndexMin && i < movieIndexMax).map(e => e['_id']))
     }
 
-
-    //TODO: swap doubles
-
     return (
         <div className="container">
-            <div className={style.sortBy}>
-                <div className={style.sortByTitle}>
-                    Sort by
+            <div className={style.submenu}>
+                {moviesOL?.length === 0 ? <div>No match on your query!</div> : <div>{moviesOL.length} matchs!</div>}
+                <div className={style.sort}>
+                    <div className={style.sortBy}>
+                        <div className={style.sortByTitle}>
+                            Sort by
+                        </div>
+                        <div className={`${style.sortLink} ${sorter === 'date' ? style.selected : ''}`} onClick={() => sortByDate()} > Date </div>
+
+                        <div className={`${style.sortLink} ${sorter === 'rating' ? style.selected : ''}`} onClick={() => sortByRating()} > Rating </div>
+
+                        <div className={`${style.sortLink} ${sorter === 'title' ? style.selected : ''}`} onClick={() => sortByTitle()} > Title </div>
+                        <div className={style.sortByTitle}></div>
+                    </div>
+                    <select className={style.selectResNum} name="resultsPerPage" id="resultsNumber" onChange={e => setMoviesPerPage(+e.target.value)}>
+                        <option value="20">20 résultats par page</option>
+                        <option value="50">50 résultats par page</option>
+                        <option value="100">100 résultats par page</option>
+                    </select>
                 </div>
-                <div className={`${style.sortLink} ${sorter === 'date' ? style.selected : ''}`} onClick={() => sortByDate()} > Date </div>
+                <div className={style.num}>page {page} {
+                    page < pagesNumber ? (
+                        <span>suivant</span>
 
-                <div className={`${style.sortLink} ${sorter === 'rating' ? style.selected : ''}`} onClick={() => sortByRating()} > Rating </div>
-
-                <div className={`${style.sortLink} ${sorter === 'title' ? style.selected : ''}`} onClick={() => sortByTitle()} > Title </div>
+                    ) : (
+                        <span>page {pagesNumber}</span>
+                    )
+                } sur {pagesNumber}
+                </div>
             </div>
 
             <ul className={style.ulMain}>
-                {moviesOL?.length === 0 && <div>No match on your query!</div> }
                 {moviesOL?.map((movie, i) => {
                     if (i >= movieIndexMin && i < movieIndexMax) {
                         return (

@@ -38,7 +38,11 @@ export default async function (req, res) {
                 .project({
                     _id: "$_id",
                     title: "$title",
-                    poster: "$poster",
+                    poster: "$poster",          // 'url'
+                    genres: "$genres",            // []
+                    directors: "$directors",      // []
+                    'imdb.rating': "$imdb.rating",      // nber
+                    year: "$year"
                 })
                 .toArray()
             break
@@ -57,17 +61,25 @@ export default async function (req, res) {
             // GET matching movies _id
             movies = await db
                 .collection('movies')
-                .find(request)
-                // .filter({ 'imdb.rating': { $ne: '' } })
-                .project({
-                    _id: "$_id",                // Object_id
-                    title: "$title",            // ''
-                    poster: "$poster",          // 'url'
-                    genres: "$genres",            // []
-                    directors: "$directors",      // []
-                    'imdb.rating': "$imdb.rating",      // nber
-                    year: "$year"
-                })
+                .aggregate([
+                    {$match: request},
+                    {$sort: {
+                        year: -1,
+                        'imdb.rating': -1
+                    }}
+                ])
+
+                // .find(request)
+                // // .filter({ 'imdb.rating': { $ne: '' } })
+                // .project({
+                //     _id: "$_id",                // Object_id
+                //     title: "$title",            // ''
+                //     poster: "$poster",          // 'url'
+                //     genres: "$genres",            // []
+                //     directors: "$directors",      // []
+                //     'imdb.rating': "$imdb.rating",      // nber
+                //     year: "$year"
+                // })
                 // .sort({ 'year': -1 })
                 // .limit(500)
                 .toArray()
