@@ -225,6 +225,7 @@ export default function Home({ props }) {
                                         </div>
                                     </div>
                                 </div>
+                                <div className={style.plot}>{movie.plot}</div>
                                 <ul className={style.ulComment}>
                                     {movie && comments && <Comments comments={comments} movie={movie} />}
                                 </ul>

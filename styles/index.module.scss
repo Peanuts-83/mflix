@@ -154,6 +154,15 @@
             }
         }
 
+        .plot {
+            background: linear-gradient(0deg, rgba(102,102,102,1) 0%, rgba(0,0,0,1) 100%);
+            color: white;
+            padding: 15px;
+            line-height: 120%;
+            font-size: .8em;
+            font-style: italic;
+        }
+
         .ulComment {
             padding: 10px 20px 30px 20px;
             margin: 0 0 20px 0;
