@@ -66,26 +66,18 @@ export default async function (req, res) {
                     {$sort: {
                         year: -1,
                         'imdb.rating': -1
-                    }}
+                    }},
+                    {$group: {
+                        _id: '$title',
+                        data: {
+                            '$first': '$$ROOT'
+                        }
+                    }},
                 ])
-
-                // .find(request)
-                // // .filter({ 'imdb.rating': { $ne: '' } })
-                // .project({
-                //     _id: "$_id",                // Object_id
-                //     title: "$title",            // ''
-                //     poster: "$poster",          // 'url'
-                //     genres: "$genres",            // []
-                //     directors: "$directors",      // []
-                //     'imdb.rating': "$imdb.rating",      // nber
-                //     year: "$year"
-                // })
-                // .sort({ 'year': -1 })
-                // .limit(500)
                 .toArray()
             console.log('MOVIES found -', movies.length)
         // console.log('MOVIES wrong date -', movies.map(e => e.year).filter(e => String(e).includes('è')))
     }
 
-    res.json(movies)
+    res.json(movies.map(e => e.data))
 }
