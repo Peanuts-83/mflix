@@ -163,7 +163,6 @@ export default function Home({ props }) {
                             <span key={i} className={`${style.next} ${style.active}`} onClick={() => setPage(x)}> {x} <span>/</span></span>
                     })}
                     {page < pagesNumber && <span className={`${style.next} ${style.active}`} onClick={() => changePageArray('next')} title='next'>...next</span>}
-
                 </div>
             </div>
 
@@ -206,9 +205,15 @@ export default function Home({ props }) {
                                                     Director(s)
                                                 </div>
                                                 {movie.directors && movie.directors.length > 0 ?
-                                                    (movie.directors?.map((d, k) => (
-                                                        <div key={k}><strong>{d}</strong></div>
-                                                    ))) : (
+                                                    (movie.directors?.map((d, k) => {
+                                                        if (k < 5) {
+                                                            return (
+                                                                <div key={k}><strong>{d}</strong></div>
+                                                            )
+                                                        } else {
+                                                            return <span>...</span>
+                                                        }
+                                                    })) : (
                                                         <div><em>not provided</em></div>
                                                     )}
                                             </div>
@@ -228,6 +233,19 @@ export default function Home({ props }) {
                     }
                 })}
             </ul>
+            <div className={style.num}>
+                {page !== 1 && <span className={`${style.next} ${style.active}`} onClick={() => changePageArray('previous')} title='next'>Previous...</span>}
+                {pageArray.map((x, i) => {
+                    return x === page ?
+                        x === pagesNumber ?
+                            <span key={i}> {x} </span>
+                            :
+                            <span key={i}> {x} <span>/</span></span>
+                        :
+                        <span key={i} className={`${style.next} ${style.active}`} onClick={() => setPage(x)}> {x} <span>/</span></span>
+                })}
+                {page < pagesNumber && <span className={`${style.next} ${style.active}`} onClick={() => changePageArray('next')} title='next'>...next</span>}
+            </div>
         </div >
     )
 }
