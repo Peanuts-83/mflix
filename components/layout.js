@@ -1,19 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import React, { createRef, useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import Link from "next/link"
 import SearchForm from "./SearchForm"
 import LoadingModal from 'components/LoadingModal'
+import Intentions from './Intentions'
 
 export default function Layout({ children, setMovies }) {
     const [loading, setLoading] = useState(false)
+    const intentions = createRef()
+
+    function toggleIntentions() {
+        console.log('INTENTIONS', intentions.current.className);
+        intentions.current.className === 'intentions' ?
+        intentions.current.className = 'intentions show' :
+        intentions.current.className = 'intentions'
+    }
 
     return (
         <>
             {loading && <LoadingModal />}
                 <header>
                     <nav>
-                        <a className='nav' title='Intentions' href='#'>
+                        <a className='nav' title='Intentions' href='#' onClick={toggleIntentions}>
                             <FontAwesomeIcon icon={faInfoCircle} className='icon' />
                             <p className="icon_text">
                                 Intentions
@@ -25,6 +34,7 @@ export default function Layout({ children, setMovies }) {
                                 Contact
                             </p>
                         </a>
+                        <Intentions ref={intentions} toggle={toggleIntentions} />
                     </nav>
                     <div className="top">
                         <Link href='/'>

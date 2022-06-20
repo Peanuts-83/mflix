@@ -44,6 +44,40 @@ nav {
 	padding-right: 20px;
 }
 
+.intentions {
+	display: none;
+	position: absolute;
+	z-index: 100;
+	top: 70px;
+	right: 30px;
+	width: 700px !important;
+	border-radius: 10px;
+	background-color: rgba(11, 62, 90, 0.8);
+	color: white;
+	transition: all .5s;
+	em {
+		font-size: 21px;
+	}
+	.close {
+		font-weight: bolder;
+		cursor: pointer;
+		padding: 5px;
+		border: 1px dashed white;
+		align-self: flex-end;
+	}
+	ul {
+		justify-self: flex-start;
+		align-self: flex-start;
+		list-style: none;
+	}
+	.container {
+		display: flex;
+		justify-content: flex-start;
+		text-align: left;
+		padding: 0 20px;
+	}
+}
+
 nav a {
 	padding: 20px;
 }
@@ -147,5 +181,13 @@ footer {
 
 	.icon_text {
 		display: none;
+	}
+
+	.intentions {
+		width: 300px !important;
+		font-size: .8em;
+		em {
+			font-size: 1.2em;
+		}
 	}
 }
