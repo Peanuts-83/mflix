@@ -1,3 +1,14 @@
+# Mflix - Make up your advice
+
+## How to use?
+
+This project has been made for learning and testing purpose. Current active sections in /pages/index.js, and API routes in /pages/api/movies/
+
+* Clone this repo
+* npm install
+* npm run dev - Local demo on "localhost:3000"
+
+
 ## Example app using MongoDB
 
 [MongoDB](https://www.mongodb.com/) is a general purpose, document-based, distributed database built for modern application developers and for the cloud era. This example will show you how to connect to and use MongoDB as your backend for your Next.js app.
